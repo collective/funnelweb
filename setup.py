@@ -16,7 +16,7 @@ long_description = (
     'Detailed Documentation\n'
     '**********************\n'
     + '\n' +
-    read('funnelweb', 'recipe', 'funnelweb', 'README.txt')
+    read('funnelweb', 'recipe', 'README.txt')
     + '\n' +
     'Contributors\n' 
     '************\n'
