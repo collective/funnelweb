@@ -23,13 +23,6 @@ class Recipe(z3c.recipe.scripts.scripts.Scripts):
             part,key = k.split('-',1)
             args.setdefault(part, {})[key] = v
         default = buildout['buildout']['directory']+'/var/cache'
-        default = args['crawler'].get('url','')
-        args.setdefault('crawler',{}).setdefault('site_url',default)
-        default = args.setdefault('upload',{}).get('url','')
-        args.setdefault('upload',{}).setdefault('target',default)
-        #args.setdefault('schemaupdater',{}).setdefault('target',default)
-        #args.setdefault('publish',{}).setdefault('target',default)
-        #args.setdefault('excludefromnavigation',{}).setdefault('target',default)
 
 
         self.options['eggs'] = """transmogrify.htmltesting
