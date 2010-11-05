@@ -33,9 +33,9 @@ The script will
 6. Determines title,hidden from navigation etc 
 7. Uploads to plone, or saves html to local directory
 
-e.g.
+e.g. ::
 
-$> bin/funnelweb --crawler:site_url=http://www.whitehouse.gov --crawler:max=50 --localupload:output=var/funnelwebdebug --ploneupload=http://admin:admin@localhost:8080/Plone
+  $> bin/funnelweb --crawler:site_url=http://www.whitehouse.gov --crawler:max=50 --localupload:output=var/funnelwebdebug --ploneupload=http://admin:admin@localhost:8080/Plone
 
 will restrict the crawler to the first 50 pages and then convert the content into the
 local directory var/funnelwebdeb and also upload into a local plone site.
@@ -50,17 +50,18 @@ commandline and recipe options refer to options in the pipeline. You can view th
 Customising the pipeline
 ------------------------
 
-$> bin/funnelweb --pipeline
+You can view pipeline and all it's options via the following command ::
 
-You can also save this pipeline and customise it for your own needs
+ $> bin/funnelweb --pipeline
 
-$> bin/funnelweb Ðpipeline > pipeline.cfg
+You can also save this pipeline and customise it for your own needs ::
 
-$> {edit} pipeline.cfg
+ $> bin/funnelweb Ðpipeline > pipeline.cfg
+ $> {edit} pipeline.cfg
+ $> bin/funnelweb --pipeline=pipeline.cfg
 
-$> bin/funnelweb --pipeline=pipeline.cfg
-
-See transmogrifier documentation to see how to add your own blueprints or use some standard blueprints
+See transmogrifier documentation to see how to add your own blueprints or add blueprints that
+already exist to your custom pipeline.
 
 
 
