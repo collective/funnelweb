@@ -43,6 +43,45 @@ local directory var/funnelwebdeb and also upload into a local plone site.
 Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
 commandline and recipe options refer to options in the pipeline. You can view the pipeline used
 
+Templates
+---------
+
+Funnelweb has a built clustering algorithm that tries to automatically extract the content from the html template.
+This is slow and not always effective. Often you will need to input your own template extraction rules.
+
+Rules are in the form of ::
+
+  (title|description|text|anything) = (text|html|optional) XPath
+  
+See
+http://www.w3schools.com/xpath/default.asp
+http://blog.browsermob.com/2009/04/test-your-selenium-xpath-easily-with-firebug/
+for XPath info
+
+Note that spaces in XPaths must be escaped as &#32;
+
+For example ::
+
+  [funnelweb]
+  recipe = funnelweb
+  crawler-site_url=http://www.whitehouse.gov
+  ploneupload-target=http://admin:admin@localhost:8080/Plone
+  template1:title       = text //div[@class='body']//h1[1]
+  template1:_delete1    = optional //div[@class='body']//a[@class='headerlink']
+  template1:_delete2    = optional //div[contains(@class,'admonition-description')]
+  template1:description = text //div[contains(@class,'admonition-description')]//p[@class='last']
+  template1:text        = html //div[@class='body']
+ 
+In the default pipeline there are four templates called template1, template2, template3 and template4.
+
+If not all XPaths are matched in the previous template then the next template will be tried.
+
+When a XPath is applied within a single template, the html it matches will be removed from the page.
+Another rule in that same template can't match the same html fragment.
+
+If content part is not useful to Plone, ie text, title or description it is a way to effectively remove that html
+from the content.
+
 Funnelweb Pipeline
 ------------------
 
