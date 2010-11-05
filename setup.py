@@ -11,12 +11,7 @@ def read(*rnames):
 version = '1.0'
 
 long_description = (
-    read('README.txt')
-    + '\n' +
-    'Detailed Documentation\n'
-    '**********************\n'
-    + '\n' +
-    read('funnelweb', 'recipe', 'README.txt')
+    read('README.rst')
     + '\n' +
     'Contributors\n' 
     '************\n'
