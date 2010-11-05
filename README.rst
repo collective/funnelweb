@@ -43,6 +43,14 @@ local directory var/funnelwebdeb and also upload into a local plone site.
 Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
 commandline and recipe options refer to options in the pipeline. You can view the pipeline used
 
+Funnelweb Pipeline
+------------------
+
+see funnelweb/runner/pipeline.cfg
+or type ::
+ $> bin/funnelweb --pipeline
+
+
 .. include:: funnelweb/runner/pipeline.cfg
    :literal:
 
