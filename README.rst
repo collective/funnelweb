@@ -40,8 +40,16 @@ e.g. ::
 will restrict the crawler to the first 50 pages and then convert the content into the
 local directory var/funnelwebdeb and also upload into a local plone site.
 
-Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
-commandline and recipe options refer to options in the pipeline. You can view the pipeline used
+You can also crawl a local directory of html with relative links ::
+
+ $> bin/funnelweb --crawler:site_url=file://mydirectory
+ 
+or if the local directory contains html saved from a website and might have absolute urls in it ::
+
+ $> bin/funnelweb --crawler:site_url=http://therealsite.com --crawler:cache=mydirectory
+ 
+
+
 
 Templates
 ---------
@@ -84,6 +92,9 @@ Note that spaces in XPaths must be escaped as &#32;
 
 Funnelweb Pipeline
 ------------------
+
+Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
+commandline and recipe options refer to options in the pipeline.
 
 see funnelweb/runner/pipeline.cfg
 or type ::
