@@ -12,16 +12,16 @@ Easily import sites into Plone.
 Introduction
 ------------
 
-The simplest way to install is via a buildout recipe
+The simplest way to install is via a buildout recipe ::
 
   [funnelweb]
   recipe = funnelweb
   crawler-site_url=http://www.whitehouse.gov
   ploneupload-target=http://admin:admin@localhost:8080/Plone
 
-This is will create a script to import content from the whitehouse.gov. This can be run by
+This is will create a script to import content from the whitehouse.gov. This can be run by ::
 
-$> bin/funnelweb
+ $> bin/funnelweb
 
 The script will
 
@@ -43,8 +43,8 @@ local directory var/funnelwebdeb and also upload into a local plone site.
 Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
 commandline and recipe options refer to options in the pipeline. You can view the pipeline used
 
-..include:: funnelweb/runner/pipeline.cfg
-  :literal:
+.. include:: funnelweb/runner/pipeline.cfg
+   :literal:
 
 
 Customising the pipeline
