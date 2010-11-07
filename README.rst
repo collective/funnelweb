@@ -16,10 +16,11 @@ The simplest way to install is via a buildout recipe ::
 
   [funnelweb]
   recipe = funnelweb
-  crawler-site_url=http://www.whitehouse.gov
+  crawler-url=http://www.whitehouse.gov
   ploneupload-target=http://admin:admin@localhost:8080/Plone
 
-This is will create a script to import content from the whitehouse.gov. This can be run by ::
+This is will create a script to import content from the whitehouse.gov and upload
+it to a local plone site via xmlrpc. This can be run by ::
 
  $> bin/funnelweb
 
@@ -33,22 +34,86 @@ The script will
 6. Determines title,hidden from navigation etc 
 7. Uploads to plone, or saves html to local directory
 
-e.g. ::
 
-  $> bin/funnelweb --crawler:site_url=http://www.whitehouse.gov --crawler:max=50 --localupload:output=var/funnelwebdebug --ploneupload=http://admin:admin@localhost:8080/Plone
+History
+-------
+
+- 2008 - Built to import large corporate intranet
+- 2009 Ð pretaweb.funnelweb (deprecated). Built into Plone UI > Actions > Import
+- 2010 Ð Spit blueprints into transmogrify.* release on pypi
+- 2010 Ð collective.developermanual sphinx to plone uses funnelweb blueprints
+- 2010 Ð funnelweb Recipe + Script released
+
+Thanks Ð Dylan Jay, Vitaliy Podoba, Rok Garbas, Mikko Ohtamaa, Tim Knap
+
+
+Options
+-------
+
+Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
+commandline and recipe options refer to options in the pipeline. All the options below
+can either be given as options to the buildout recipe or can be overridden via the commandline.
+For instance ::
+
+  [funnelweb]
+  recipe = funnelweb
+  crawler-url=http://www.whitehouse.gov
+
+::
+
+ $> bin/funnelweb 
+
+and ::
+
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov
+
+will do the same thing.
+
+
+Crawling
+--------
+
+For example ::
+
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:max=50 --localupload:output=var/funnelwebdebug --ploneupload=http://admin:admin@localhost:8080/Plone
 
 will restrict the crawler to the first 50 pages and then convert the content into the
 local directory var/funnelwebdeb and also upload into a local plone site.
 
 You can also crawl a local directory of html with relative links ::
 
- $> bin/funnelweb --crawler:site_url=file://mydirectory
+ $> bin/funnelweb --crawler:url=file:///mydirectory
  
 or if the local directory contains html saved from a website and might have absolute urls in it ::
 
- $> bin/funnelweb --crawler:site_url=http://therealsite.com --crawler:cache=mydirectory
- 
+ $> bin/funnelweb --crawler:url=http://therealsite.com --crawler:cache=mydirectory
 
+The following will not crawl anything larget than 4Mb ::
+
+ $> bin/funnelweb --crawler:maxsize=400000
+
+To skip crawling links by regular expression ::
+ 
+  [funnelweb]
+  recipe = funnelweb
+  crawler-url=http://www.whitehouse.gov
+  crawler-ignore = \.mp3
+                   \.mp4 
+
+If funnelweb is having trouble parsing the html of some pages you can preprocesses
+the html before it is parsed. e.g. ::
+
+  [funnelweb]
+  recipe = funnelweb
+  crawler-patterns = (<script>)[^<]*(</script>)
+  crawler-subs = \1\2
+  
+If you'd like to skip processing links with certain mimetypes you can use the
+drop:condition. This TALES expression determines what will be processed further
+
+  [funnelweb]
+  recipe = funnelweb
+  drop-condition: python:item.get('_mimetype') not in ['application/x-javascript','text/css','text/plain','application/x-java-byte-code'] and item.get('_path','').split('.')[-1] not in ['class']
 
 
 Templates
@@ -89,6 +154,87 @@ For more information about XPath see
 
 Note that spaces in XPaths must be escaped as &#32;
 
+Site Analysis
+-------------
+
+In order to provide a cleaner looking plone site there are several options analysis
+the entire crawler site and clean it up. These are turned off by default.
+
+To determine if an item is a default page for a container if it has many links
+to items in that container even if not contained in that folder and then move
+it to that folder use ::
+
+ $> bin/funnelweb --indexguess:condition=python:True
+
+You can automatically find better page titles by analysing backlink text ::
+
+  [funnelweb]
+  recipe = funnelweb
+  titleguess-condition = python:True
+  titleguess-ignore =
+	click
+	read more
+	close
+	Close
+	http:
+	file:
+	img
+
+
+The following will finds items only referenced by one page and moves them into
+a new folder with the page as the default view. ::
+
+ $> bin/funnelweb --attachmentguess:condition=python:True
+
+or the following will only move attachments that are images and use index-html as the new
+name for the default page of the newly created folder ::
+
+  [funnelweb]
+  recipe = funnelweb
+  attachmentguess-condition = python: subitem.get('_type') in ['Image']
+  attachmentguess-defaultpage = index-html
+
+The following will tidy up the urls based on a TALES expression
+
+ $> bin/funnelweb --urltidy:link_expr="python:item['_path'].endswith('.html') and item['_path'][:-5] or item['_path']"
+
+Plone Uploading
+---------------
+
+Uploading happens via remote xmlrpc calls so can be done to a live running site anywhere.
+
+To set where a the site will be uploaded to use ::
+
+ $> bin/funnelweb --ploneupload:target=http://username:password@myhost.com/myfolder
+ 
+Currently only basic authentication via setting the username and password in the url is supported. If no target
+is set then the site will be crawled but not uploaded.
+
+If you'd like to change the type of what's uploaded ::
+
+ $> bin/funnelweb --changetype:value=python:{'Folder':'HelpCenterReferenceManualSection','Document':HelpCenterLeafPage}.get(item['_type'],item['_type'])
+
+By default funnelweb will automatically set aliases based on the orignal crawled urls so that any old links
+will automatically be redirected to the new cleaned up urls. You can disable this by ::
+
+ $> bin/funnelweb --plonealias:target=
+
+You can change what items get published to which state by setting the following ::
+
+  [funnelweb]
+  recipe = funnelweb
+  publish-value = python:["publish"]
+  publish-condition = python:item.get('_type') != 'Image' and not options.get('disabled')
+
+Funnelweb will hide certain items from plones navigation if that item was only ever linked
+to from within the content area. You can disable this behavior by ::
+
+ $> bin/funnelweb --plonehide:target=
+ 
+You can get a local file representation of what will be uploaded by using the following
+
+ $> bin/funnelweb --localupload:output=var/mylocaldir
+ 
 
 Funnelweb Pipeline
 ------------------
