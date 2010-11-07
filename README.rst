@@ -1,7 +1,7 @@
-FunnelWeb
-=========
+FunnelWeb - Content conversion made easy
+========================================
 
-Easily import sites into Plone.
+Easily convert content from existing sites into Plone.
 
 - Code repository: http://github.com/djay/funnelweb
 - Questions and comments to http://github.com/djay/funnelweb/issues
@@ -12,6 +12,15 @@ Easily import sites into Plone.
 Introduction
 ------------
 
+Funnelweb is very easy to get started with via a few settings in either buildout
+or the commandline. The predefined options have been
+well thought out and have proved useful on many site convertions over the years.
+Funnelweb is also very powerful since if the included transformations aren't
+enough for your needs, funnelweb is built on a modular
+transformation archtecture called transmogrifier. This allows you to insert
+transformation steps from yourself or others to fit any site conversion need.
+
+
 The simplest way to install is via a buildout recipe ::
 
   [funnelweb]
@@ -19,7 +28,7 @@ The simplest way to install is via a buildout recipe ::
   crawler-url=http://www.whitehouse.gov
   ploneupload-target=http://admin:admin@localhost:8080/Plone
 
-This is will create a script to import content from the whitehouse.gov and upload
+The above example will create a script to import content from the whitehouse.gov and upload
 it to a local plone site via xmlrpc. This can be run by ::
 
  $> bin/funnelweb
