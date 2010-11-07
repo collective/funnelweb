@@ -268,7 +268,7 @@ You can view pipeline and all it's options via the following command ::
 
 You can also save this pipeline and customise it for your own needs ::
 
- $> bin/funnelweb –pipeline > pipeline.cfg
+ $> bin/funnelweb --pipeline > pipeline.cfg
  $> {edit} pipeline.cfg
  $> bin/funnelweb --pipeline=pipeline.cfg
 
