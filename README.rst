@@ -71,7 +71,7 @@ will do the same thing.
 
 
 Crawling
---------
+~~~~~~~~
 
 For example ::
 
@@ -109,7 +109,7 @@ the html before it is parsed. e.g. ::
   crawler-subs = \1\2
   
 If you'd like to skip processing links with certain mimetypes you can use the
-drop:condition. This TALES expression determines what will be processed further
+drop:condition. This TALES expression determines what will be processed further ::
 
   [funnelweb]
   recipe = funnelweb
@@ -117,7 +117,7 @@ drop:condition. This TALES expression determines what will be processed further
 
 
 Templates
----------
+~~~~~~~~~
 
 Funnelweb has a built clustering algorithm that tries to automatically extract the content from the html template.
 This is slow and not always effective. Often you will need to input your own template extraction rules.
@@ -155,7 +155,7 @@ For more information about XPath see
 Note that spaces in XPaths must be escaped as &#32;
 
 Site Analysis
--------------
+~~~~~~~~~~~~~
 
 In order to provide a cleaner looking plone site there are several options analysis
 the entire crawler site and clean it up. These are turned off by default.
@@ -194,12 +194,12 @@ name for the default page of the newly created folder ::
   attachmentguess-condition = python: subitem.get('_type') in ['Image']
   attachmentguess-defaultpage = index-html
 
-The following will tidy up the urls based on a TALES expression
+The following will tidy up the urls based on a TALES expression ::
 
  $> bin/funnelweb --urltidy:link_expr="python:item['_path'].endswith('.html') and item['_path'][:-5] or item['_path']"
 
 Plone Uploading
----------------
+~~~~~~~~~~~~~~~
 
 Uploading happens via remote xmlrpc calls so can be done to a live running site anywhere.
 
@@ -231,7 +231,7 @@ to from within the content area. You can disable this behavior by ::
 
  $> bin/funnelweb --plonehide:target=
  
-You can get a local file representation of what will be uploaded by using the following
+You can get a local file representation of what will be uploaded by using the following ::
 
  $> bin/funnelweb --localupload:output=var/mylocaldir
  
@@ -263,6 +263,9 @@ You can also save this pipeline and customise it for your own needs ::
  $> bin/funnelweb Ðpipeline > pipeline.cfg
  $> {edit} pipeline.cfg
  $> bin/funnelweb --pipeline=pipeline.cfg
+
+Customising the pipeline allows you add your own personal transformations which
+haven't been pre-considered by the standard funnelweb tool.
 
 See transmogrifier documentation to see how to add your own blueprints or add blueprints that
 already exist to your custom pipeline.
