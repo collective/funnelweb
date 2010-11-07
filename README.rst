@@ -47,13 +47,12 @@ The script will
 History
 -------
 
-- 2008 - Built to import large corporate intranet
-- 2009 Ð pretaweb.funnelweb (deprecated). Built into Plone UI > Actions > Import
-- 2010 Ð Spit blueprints into transmogrify.* release on pypi
-- 2010 Ð collective.developermanual sphinx to plone uses funnelweb blueprints
-- 2010 Ð funnelweb Recipe + Script released
+- 2008 Built to import large corporate intranet
+- 2009 released pretaweb.funnelweb (deprecated). Built into Plone UI > Actions > Import
+- 2010 Spit blueprints into transmogrify.* release on pypi
+- 2010 collective.developermanual sphinx to plone uses funnelweb blueprints
+- 2010 funnelweb Recipe + Script released
 
-Thanks Ð Dylan Jay, Vitaliy Podoba, Rok Garbas, Mikko Ohtamaa, Tim Knap
 
 
 Options

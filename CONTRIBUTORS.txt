@@ -1,2 +1,6 @@
-"", Author
+"Dylan Jay", Author
+"Vitaliy Podoba", Contributor
+"Rok Garbas", Contributor
+"Mikko Ohtamaa", Contributor
+"Tim Knapp", Contributor
 
