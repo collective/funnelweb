@@ -1,4 +1,11 @@
-1.0 (2010-11-08)
+1.0b2 (2010-11-09)
+----------------
+
+- Removed z3c.recipe.scripts as a dependency since it creates version conflicts with older zope installs.
+  ["Dylan Jay"]
+
+
+1.0b1 (2010-11-08)
 ----------------
 
 - Initial release tying togeather new and original funnelweb recipes into

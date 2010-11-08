@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Recipe funnelweb"""
 
-import z3c.recipe.scripts
+from zc.recipe.egg.egg import Scripts
 from urllib import pathname2url as url
 from sys import argv
 import logging
@@ -10,7 +10,7 @@ from pkg_resources import resource_string, resource_filename
 
 logging.basicConfig(level=logging.DEBUG)
 
-class Recipe(z3c.recipe.scripts.scripts.Scripts):
+class Recipe(Scripts):
     """zc.buildout recipe"""
 
     def __init__(self, buildout, name, options):
@@ -38,7 +38,7 @@ class Recipe(z3c.recipe.scripts.scripts.Scripts):
                 zope.app.component"""
         self.options['arguments'] =  str(args)
 #        self.options['entry-points'] = '%s=transmogrify.htmltesting.runner:runner'%name
-        return  z3c.recipe.scripts.scripts.Scripts.__init__(self, buildout, name, options)
+        return  Scripts.__init__(self, buildout, name, options)
 
     def install(self):
         """Installer"""
@@ -49,8 +49,8 @@ class Recipe(z3c.recipe.scripts.scripts.Scripts):
 
         # Return files that were created by the recipe. The buildout
         # will remove all returned files upon reinstall.
-        return z3c.recipe.scripts.scripts.Scripts.install(self)
+        return Scripts.install(self)
 
     def update(self):
         """Updater"""
-        return z3c.recipe.scripts.scripts.Scripts.update(self)
+        return Scripts.update(self)

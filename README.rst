@@ -1,5 +1,5 @@
 FunnelWeb - Content conversion made easy
-========================================
+****************************************
 
 Easily convert content from existing sites into Plone.
 
