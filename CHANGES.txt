@@ -4,6 +4,8 @@
 - Removed z3c.recipe.scripts as a dependency since it creates version conflicts with older zope installs.
   ["Dylan Jay"]
 
+- Make default cache be put in domain specific directory
+  ["Dylan Jay"]
 
 1.0b1 (2010-11-08)
 ----------------
