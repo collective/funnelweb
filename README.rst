@@ -244,23 +244,14 @@ You can get a local file representation of what will be uploaded by using the fo
  $> bin/funnelweb --localupload:output=var/mylocaldir
  
 
-Funnelweb Pipeline
-------------------
-
-Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
-commandline and recipe options refer to options in the pipeline.
-
-see funnelweb/runner/pipeline.cfg
-or type ::
- $> bin/funnelweb --pipeline
-
-
-.. include:: funnelweb/runner/pipeline.cfg
-   :literal:
-
-
 Customising the pipeline
 ------------------------
+
+You might need to insert further transformation steps for you particular
+conversion usecase. To do this you can extend funnelwebs underlying
+transmogrifier pipeline. Funnelweb uses a transmogrifier pipeline to perform the needed transformations and all
+commandline and recipe options refer to options in the pipeline.
+
 
 You can view pipeline and all it's options via the following command ::
 
@@ -277,6 +268,18 @@ haven't been pre-considered by the standard funnelweb tool.
 
 See transmogrifier documentation to see how to add your own blueprints or add blueprints that
 already exist to your custom pipeline.
+
+Funnelweb Pipeline
+------------------
+
+see funnelweb/runner/pipeline.cfg
+or type ::
+
+ $> bin/funnelweb --pipeline
+
+
+.. include:: funnelweb/runner/pipeline.cfg
+   :literal:
 
 
 
