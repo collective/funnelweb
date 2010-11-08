@@ -15,7 +15,7 @@ class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
         self.buildout, self.name, self.options = buildout, name, options
-        self.options.setdefault('cache-output',"%s/var/funnelwebcache"%buildout['buildout']['directory'])
+        #self.options.setdefault('cache-output',"%s/var/funnelwebcache"%buildout['buildout']['directory'])
         args = {}
         for k,v in self.options.items():
             if '-' not in k:
