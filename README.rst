@@ -78,21 +78,39 @@ and ::
 will do the same thing.
 
 
-Crawling
-~~~~~~~~
+Crawling - html to import
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Funnelweb imports HTML either from a live website, for a folder on disk, or a folder
+on disk with html which used to come from a live website and may still have absolute
+links refering to that website.
+
+To crawl a live website supply the crawler with a base http url to start crawling with.
+This url must be the url which all the other urls you want from the site start with.
 
 For example ::
 
- $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:max=50 --localupload:output=var/funnelwebdebug --ploneupload=http://admin:admin@localhost:8080/Plone
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:max=50  --ploneupload=http://admin:admin@localhost:8080/Plone
 
-will restrict the crawler to the first 50 pages and then convert the content into the
-local directory var/funnelwebdeb and also upload into a local plone site.
+will restrict the crawler to the first 50 pages and then convert the content
+into a local plone site.
 
-You can also crawl a local directory of html with relative links ::
+The site you crawl will be cached locally so if you run funnelweb again it will run much quicker. If you'd like
+to disable the local caching use ::
+
+ $> bin/funnelweb --cache:output=
+
+By default the cache is stored in var/funnelwebcache/{site url}/. You can set this to another directory using
+
+ $> bin/funnelweb --cache:output=my_new_dir
+
+
+You can also crawl a local directory of html with relative links by just using a file: style url ::
 
  $> bin/funnelweb --crawler:url=file:///mydirectory
  
-or if the local directory contains html saved from a website and might have absolute urls in it ::
+or if the local directory contains html saved from a website and might have absolute urls in it
+the you can set this as the cache. The crawler will always look up the cache first ::
 
  $> bin/funnelweb --crawler:url=http://therealsite.com --crawler:cache=mydirectory
 
