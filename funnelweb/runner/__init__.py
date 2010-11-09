@@ -31,13 +31,15 @@ blueprint = collective.transmogrifier.sections.tests.pprinter
  
 def runner(args={}):
 
-    for k,v in [a.split('=') for a in sys.argv[1:]]:
+    for k,_,v in [a.partition('=') for a in sys.argv[1:]]:
         k = k.lstrip('--')
-        part,key = k.split(':')
-        args.setdefault(part, {})[key] = v
+        if ':' in k:
+            part,_,key = k.partition(':')
+            args.setdefault(part, {})[key] = v
+        else:
+            args[k] = v
 
     config = resource_filename(__name__,'pipeline.cfg')
-    
     if args.get('pipeline') == '':
         f = open(config)
         print f.read()
