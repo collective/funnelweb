@@ -272,8 +272,8 @@ You can get a local file representation of what will be uploaded by using the fo
  $> bin/funnelweb --localupload:output=var/mylocaldir
  
 
-Customising the pipeline
-------------------------
+Working directly with transmogrifier (advanced)
+-----------------------------------------------
 
 You might need to insert further transformation steps for you particular
 conversion usecase. To do this you can extend funnelwebs underlying
@@ -298,7 +298,7 @@ See transmogrifier documentation to see how to add your own blueprints or add bl
 already exist to your custom pipeline.
 
 Adding external blueprints
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have decided you need to customise your pipeline and you want to install transformation
 steps that use blueprints not already included in funnelweb or transmogrifier, you can include
@@ -312,7 +312,7 @@ them using buildout.
 
 
 Funnelweb Pipeline
-------------------
+~~~~~~~~~~~~~~~~~~
 
 see funnelweb/runner/pipeline.cfg
 or type ::
