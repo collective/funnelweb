@@ -15,7 +15,6 @@ class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
         self.buildout, self.name, self.options = buildout, name, options
-        #self.options.setdefault('cache-output',"%s/var/funnelwebcache"%buildout['buildout']['directory'])
         args = {}
         for k,v in self.options.items():
             if '-' not in k:
@@ -31,13 +30,11 @@ class Recipe(Scripts):
                 transmogrify.htmlcontentextractor
                 transmogrify.pathsorter
                 transmogrify.ploneremote
-                Products.ZSQLMethods
                 Products.CMFCore
-                zope.app.pagetemplate
                 funnelweb
-                zope.app.component"""
+                zope.app.component
+                """ + self.options.get('eggs','')
         self.options['arguments'] =  str(args)
-#        self.options['entry-points'] = '%s=transmogrify.htmltesting.runner:runner'%name
         return  Scripts.__init__(self, buildout, name, options)
 
     def install(self):
