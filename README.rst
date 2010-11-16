@@ -21,12 +21,18 @@ transformation archtecture called transmogrifier. This allows you to insert
 transformation steps from yourself or others to fit any site conversion need.
 
 
-The simplest way to install is via a buildout recipe ::
+The simplest way to install is via a buildout recipe (see zc.buildout) ::
+
+  [buildout]
+  parts += funnelweb
 
   [funnelweb]
   recipe = funnelweb
   crawler-url=http://www.whitehouse.gov
   ploneupload-target=http://admin:admin@localhost:8080/Plone
+  
+  $> buildout init
+  $> bin/buildout
 
 The above example will create a script to import content from the whitehouse.gov and upload
 it to a local plone site via xmlrpc. This can be run by ::
@@ -84,6 +90,10 @@ Crawling - html to import
 Funnelweb imports HTML either from a live website, for a folder on disk, or a folder
 on disk with html which used to come from a live website and may still have absolute
 links refering to that website.
+
+Funnelweb can only import things it can crawl, ie content linked from html. If your site contains javascipt
+links or password protected content then you may have to perform some extra steps
+to get funnelweb to crawl your content.
 
 To crawl a live website supply the crawler with a base http url to start crawling with.
 This url must be the url which all the other urls you want from the site start with.
