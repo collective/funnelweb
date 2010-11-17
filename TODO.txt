@@ -1,0 +1,8 @@
+
+- Use the argsparse package but take the documentation and defaults for our arguments
+  directly from the pipeline using somekind of syntax. This means we just document
+  our pipeline only.
+  
+- tests
+
+- test using easy_install directly
