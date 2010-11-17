@@ -277,6 +277,9 @@ Example: Sphinx to Plone
 As an example the following buildout recipe will create a funnelweb script that will
 convert a regular sphix documentation into remote plone content inside a PloneHelpCenter ::
 
+    [buildout]
+    parts += sphnix funnelweb
+
     [sphinx]
     recipe = collective.recipe.sphinxbuilder
     #doc-directory = .
@@ -323,7 +326,8 @@ convert a regular sphix documentation into remote plone content inside a PloneHe
     # All folderish content should be checked if they contain
     # any items on the remote site which are not presented locally. including base folder
     ploneprune-condition=python:item.get('_type') in ['HelpCenterReferenceManualSection','HelpCenterReferenceManual'] or item['_path'] == ''
-
+    
+    ploneupload-target=http://admin:admin@localhost/Plone
 
 
 Working directly with transmogrifier (advanced)
