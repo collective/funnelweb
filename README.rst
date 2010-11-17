@@ -297,18 +297,27 @@ haven't been pre-considered by the standard funnelweb tool.
 See transmogrifier documentation to see how to add your own blueprints or add blueprints that
 already exist to your custom pipeline.
 
-Adding external blueprints
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using external blueprints
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have decided you need to customise your pipeline and you want to install transformation
 steps that use blueprints not already included in funnelweb or transmogrifier, you can include
-them using buildout.
+them using the eggs option in a funnelweb buildout part ::
 
   [funnelweb]
   recipe = funnelweb
   eggs = myblueprintpackage
   pipeline = mypipeline.cfg
   
+This only works however if your blueprint package includes the following setuptools entrypoint
+in it's setup.py ::
+
+      entry_points="""
+            [z3c.autoinclude.plugin]
+            target = transmogrify
+            """,
+            )
+
 
 
 Funnelweb Pipeline
