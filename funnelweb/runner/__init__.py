@@ -2,30 +2,14 @@ from collective.transmogrifier.tests import registerConfig
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from pkg_resources import resource_string, resource_filename
 from collective.transmogrifier.transmogrifier import configuration_registry
-from Products.Five import zcml
-from zope.component import provideUtility
-from zope.interface import classProvides, implements
-import transmogrify.htmltesting
-import zope.app.component
-import re
-from pkg_resources import resource_filename
+try:
+    from Zope2.App import zcml
+except:
+    from Products.Five import zcml
 import sys
 
 class Context:
     pass
-
-
-CONFIG = """
-
-[clean]
-blueprint = collective.transmogrifier.sections.manipulator
-delete = 
-    %(strip)s
-
-[printer]
-blueprint = collective.transmogrifier.sections.tests.pprinter
-
-"""
 
 
  
@@ -48,16 +32,7 @@ def runner(args={}):
     else:
         config = args.get('pipeline', config)
 
-    from collective.transmogrifier.transmogrifier import Transmogrifier
-#    test.globs['transmogrifier'] = Transmogrifier(test.globs['plone'])
-
-    import zope.component
-    import collective.transmogrifier.sections
-    zcml.load_config('meta.zcml', zope.app.component)
-
-    zcml.load_config('meta.zcml', collective.transmogrifier)
-    zcml.load_config('configure.zcml', collective.transmogrifier.sections)
-    zcml.load_config('configure.zcml', transmogrify.htmltesting)
+    zcml.load_config('configure.zcml')
 
 
     context = Context()
@@ -79,16 +54,3 @@ def runner(args={}):
     transmogrifier(u'transmogrify.config.funnelweb', **overrides)
 
 
-
-
-def testtransmogrifier(config, strip=['_content']):
-    strip = '\t'+'\n\t'.join(strip)
-
-    config = re.sub('\.\.\.',config, 'clean\n\tprinter\n')
-    config += CONFIG
-    config = config % locals()
-    
-    runner(config)
-
-if __name__ == '__main__':
-       main()

@@ -24,15 +24,13 @@ class Recipe(Scripts):
         default = buildout['buildout']['directory']+'/var/cache'
 
 
-        self.options['eggs'] = """transmogrify.htmltesting
+        self.options['eggs'] = """
                 transmogrify.webcrawler
                 transmogrify.siteanalyser
                 transmogrify.htmlcontentextractor
                 transmogrify.pathsorter
                 transmogrify.ploneremote
-                Products.CMFCore
                 funnelweb
-                zope.app.component
                 """ + self.options.get('eggs','')
         self.options['arguments'] =  str(args)
         return  Scripts.__init__(self, buildout, name, options)
