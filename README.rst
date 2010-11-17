@@ -318,10 +318,65 @@ in it's setup.py ::
             """,
             )
 
+NB. Some transmogrifier blueprints assume they are running inside a Plone process such as those
+in plone.app.transmogrifier (see http://pypi.python.org/pypi/plone.app.transmogrifier).
+Funnelweb doesn't run inside a Plone process so these blueprints won't work. If you want upload
+content into plone, you can instead use transmogrify.ploneremote which provides alternative
+implementations which will upload content remotely via xmlrpc. transmogrify.ploneremote is already
+included in funnelweb as it is what funnelwebs default pipeline uses.
 
+Attributes available in funnelweb pipeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Funnelweb Pipeline
-~~~~~~~~~~~~~~~~~~
+When using the default blueprints in funnelweb the following are some of the attributes that
+will become attached to the items that each blueprint has access to. These can be used in the various
+condition statements etc as well as your own blueprints.
+
+_site_url
+  The base of the url as passed into the webcrawler
+  
+_path
+  The remainder of the url. _site_url + _path = url
+  
+_mimetype
+  The mimetype as returned by the crawler
+  
+_content
+  The content of the item crawled, include image, file or html data.
+  
+_orig_path
+  The original path of the item that was crawled. This is useful for setting redirects so
+  you don't get 404 errors after migrating content.
+
+_sort_order
+  An integer representing the order in which this item was crawled. Helps to determine
+  what order items should be sorted in folders created on the server if your site
+  has navigation which has links ordered top to bottom.
+
+_type
+  The type of object to be created as returned by the "typeguess" step
+  
+title, description, text etc
+  The template steps will typically create fields with content in them taken from _content
+  
+_template
+  The template steps will leave the html that wasn't seperated out into different fields into this
+  attribute.
+  
+_defaultpage
+  Set on an Folder item where you want to tell the uploading steps to set the containing item
+  mentioned in _defaultpage to be the default page shown on that folder instead of a content listing.
+  
+_transitions
+  Specify the workflow action you'd like to make on an item after it's uploaded or updated.
+  
+_origin
+  This is used internally with the transmogrify.siteanalysis.relinker blueprint as a way to
+  tell it that you have changed the _path and you now want the relinker to find any links that
+  refer to _origin to now point to _path.
+
+The Funnelweb Pipeline
+~~~~~~~~~~~~~~~~~~~~~~
 
 see funnelweb/runner/pipeline.cfg
 or type ::
