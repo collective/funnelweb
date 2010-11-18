@@ -39,15 +39,14 @@ it to a local Plone site via XML-RPC. This can be run by ::
 
  $> bin/funnelweb
 
-The script will:
+The work performed by the funnelweb script can be broken down into four sections:
 
-1. Crawl
-2. Cache locally so subsequent crawls are quicker
-3. Filter
-4. Remove boilerplate (automatically or via rules)
-5. Restructure
-6. Determines title, hidden from navigation, etc.
-7. Uploads to Plone, or saves HTML to local directory
+1. Crawling the site including caching locally so subsequent crawls are quicker and filtering out
+   unwanted content
+2. Remove boilerplate (automatically or via rules) so just content remains
+3. Analysing the site structure to improve the content quality including working out titles, default
+   views, types of objects to create, what to show in navigation etc
+4. Uploading to the CMS such as Plone, or saveing cleaned HTML to local directory
 
 
 History
