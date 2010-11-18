@@ -2,6 +2,7 @@ from collective.transmogrifier.tests import registerConfig
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from pkg_resources import resource_string, resource_filename
 from collective.transmogrifier.transmogrifier import configuration_registry
+import funnelweb
 try:
     from Zope2.App import zcml
 except:
@@ -32,7 +33,7 @@ def runner(args={}):
     else:
         config = args.get('pipeline', config)
 
-    zcml.load_config('configure.zcml')
+    zcml.load_config('configure.zcml', funnelweb)
 
 
     context = Context()
