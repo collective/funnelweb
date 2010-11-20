@@ -86,24 +86,31 @@ or the same option can be overridden via the command line ::
 The full list of steps that can be configured is
 
 1. Crawling
+
  -    crawler
  -    cache
  -    typeguess
  -    drop
+
 2. Templates
+
  -    template1
  -    template2
  -    template3
  -    template4
  -    templateauto
+
 3. Site Analysis
+
  -    indexguess
  -    titleguess
  -    attachmentguess
  -    urltidy
  -    addfolders
  -    changetype
+
 4. Uploading
+
  -    ploneupload
  -    ploneupdate
  -    plonehide
@@ -411,14 +418,13 @@ in its ``setup.py`` ::
             )
 
 .. NOTE:: Some transmogrifier blueprints assume they are running inside a Plone
-          process such as those in `plone.app.transmogrifier` (see
-	  http://pypi.python.org/pypi/plone.app.transmogrifier).  Funnelweb
-	  doesn't run inside a Plone process so these blueprints won't work. If
-	  you want upload content into Plone, you can instead use
-	  transmogrify.ploneremote which provides alternative implementations
-	  which will upload content remotely via XML-RPC.
-	  ``transmogrify.ploneremote`` is already included in funnelweb as it is
-	  what funnelweb's default pipeline uses.
+   process such as those in `plone.app.transmogrifier` (see http://pypi.python.org/pypi/plone.app.transmogrifier).  Funnelweb
+   doesn't run inside a Plone process so these blueprints won't work. If
+   you want upload content into Plone, you can instead use
+   transmogrify.ploneremote which provides alternative implementations
+   which will upload content remotely via XML-RPC.
+   ``transmogrify.ploneremote`` is already included in funnelweb as it is
+   what funnelweb's default pipeline uses.
 
 Attributes available in funnelweb pipeline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -473,14 +479,11 @@ condition statements etc. as well as your own blueprints.
 The Funnelweb Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~
 
-see ``funnelweb/runner/pipeline.cfg``
+see http://github.com/collective/funnelweb/blob/master/funnelweb/runner/pipeline.cfg
 or type ::
 
  $> bin/funnelweb --pipeline
 
-
-.. include:: funnelweb/runner/pipeline.cfg
-   :literal:
 
 
 
