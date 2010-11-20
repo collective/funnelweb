@@ -13,13 +13,13 @@ Introduction
 ------------
 
 Funnelweb is very easy to get started with via a few settings in either buildout
-or the commandline. The predefined options have been
+or the commandline. Funnelweb progresses crawler content through various steps to
+improve the quality of the final converted site. Each step and it's configuration options are
 well thought out and have proved useful on many site conversions over the years.
-Funnelweb is also very powerful since if the included transformations aren't
-enough for your needs, funnelweb is built on a modular
-transformation architecture called transmogrifier. This allows you to insert
-transformation steps from yourself or others to suit any site conversion need.
 
+Funnelweb is also very flexible as it uses a modular transmormation framework underneath
+which advanced users can use if they they need further steps added to their conversion
+process.
 
 The simplest way to install is via a buildout recipe (see zc.buildout) ::
 
@@ -43,7 +43,7 @@ The work performed by the funnelweb script can be broken down into four sections
 
 1. Crawling the site including caching locally so subsequent crawls are quicker and filtering out
    unwanted content
-2. Remove boilerplate (automatically or via rules) so just content remains
+2. Remove boilerplate/templates (automatically or via rules) so just content remains
 3. Analysing the site structure to improve the content quality including working out titles, default
    views, types of objects to create, what to show in navigation etc
 4. Uploading to the CMS such as Plone, or saveing cleaned HTML to local directory
@@ -63,34 +63,57 @@ History
 Options
 -------
 
-Funnelweb uses a transmogrifier pipeline to perform the needed transformations. All
-commandline and recipe options refer to options in the pipeline. All the options below
-can either be given as options to the buildout recipe or can be overridden via the commandline.
-For instance ::
+Funnelweb is organised as a series of steps through which crawled items pass before eventually being
+uploaded. Each step as one or more configuration options so you can customise import process
+for your needs. Almost all imports will require some level of configurations.
+
+The first part of each configuration key is the step e.g. `crawler`. The second part is the particular
+configuration option for that particular step. e.g. `url`. This is then followed by = and value or values.
+
+The configuration options can either be given as part of the buildout part e.g. ::
+
+  [buildout]
+  parts += funnelweb
 
   [funnelweb]
   recipe = funnelweb
   crawler-url=http://www.whitehouse.gov
 
-::
-
- $> bin/funnelweb 
-
-and ::
+or the same option can be overridden via the command line ::
 
  $> bin/funnelweb --crawler:url=http://www.whitehouse.gov
 
-will do the same thing.
+The full list of steps that can be configured is
 
-The options pertain to different stages in the pipeline. In the above, we are
-setting the `url` option for the `crawler` transformation. This transformation
-also takes the `checkext`, `verbose`, `maxsize` and `nonames` options.
+1. Crawling
+ -    crawler
+ -    cache
+ -    typeguess
+ -    drop
+2. Templates
+ -    template1
+ -    template2
+ -    template3
+ -    template4
+ -    templateauto
+3. Site Analysis
+-    indexguess
+-    titleguess
+-    attachmentguess
+-    urltidy
+-    addfolders
+-    changetype
+4. Uploading
+-    ploneupload
+-    ploneupdate
+-    plonehide
+-    publish
+-    plonepublish
+-    plonealias
+-    ploneprune
+-    localupload
 
-.. NOTE:: See the transmogrifier packages for documentation of the options accepted by
-          the various transformations.
-
-	  Transform options in the ``funnelweb`` buildout part refer to the
-          parts defined in ``pipeline.cfg`` (Dylan, correct me if I'm wrong).
+The most common configuration options for these steps are detailed below.
 
 Crawling - HTML to import
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,7 +183,6 @@ If you'd like to skip processing links with certain mimetypes you can use the
   recipe = funnelweb
   drop-condition: python:item.get('_mimetype') not in ['application/x-javascript','text/css','text/plain','application/x-java-byte-code'] and item.get('_path','').split('.')[-1] not in ['class']
 
-.. NOTE:: ``drop`` is a transmogrifier option, not specific to any transform.
 
 Templates
 ~~~~~~~~~
