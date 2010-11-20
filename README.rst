@@ -97,21 +97,21 @@ The full list of steps that can be configured is
  -    template4
  -    templateauto
 3. Site Analysis
--    indexguess
--    titleguess
--    attachmentguess
--    urltidy
--    addfolders
--    changetype
+ -    indexguess
+ -    titleguess
+ -    attachmentguess
+ -    urltidy
+ -    addfolders
+ -    changetype
 4. Uploading
--    ploneupload
--    ploneupdate
--    plonehide
--    publish
--    plonepublish
--    plonealias
--    ploneprune
--    localupload
+ -    ploneupload
+ -    ploneupdate
+ -    plonehide
+ -    publish
+ -    plonepublish
+ -    plonealias
+ -    ploneprune
+ -    localupload
 
 The most common configuration options for these steps are detailed below.
 
