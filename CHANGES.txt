@@ -1,5 +1,5 @@
 
-1.0b3 (????-??-??)
+1.0b3 (2010-11-20)
 ------------------
 
 - fixed --pipeline option
@@ -7,6 +7,14 @@
 - fixed eggs= options
 
 - added prune support
+
+- removed transmogrify.htmltesting as a dependency
+
+- improved documentation
+  [Jean Jordaan]
+
+- moved main repository to github collective https://github.com/collective/funnelweb
+
 
 
 1.0b2 (2010-11-09)

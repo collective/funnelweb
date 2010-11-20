@@ -217,6 +217,7 @@ If a content part is not useful to Plone (e.g. redundant text, title or descript
 from the content.
 
 For more information about XPath see
+
 - http://www.w3schools.com/xpath/default.asp
 - http://blog.browsermob.com/2009/04/test-your-selenium-xpath-easily-with-firebug/
 
