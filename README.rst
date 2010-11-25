@@ -213,9 +213,13 @@ For example ::
   template1-description = text //div[contains(@class,'admonition-description')]//p[@class='last']
   template1-text        = html //div[@class='body']
 
-In the default pipeline there are four templates called `template1`, `template2`, `template3` and `template4`.
+Note that for a single template e.g. template1, ALL of the XPaths need to match otherwise
+that template will be skipped and the next template tried. If you'd like to make it
+so that a single XPath isn't nessary for the template to match then use the keyword `optional`
+instead of `text` or `html` before the XPath.
 
-If all XPaths are not matched, then the next template will be tried.
+
+In the default pipeline there are four templates called `template1`, `template2`, `template3` and `template4`.
 
 When an XPath is applied within a single template, the HTML it matches will be removed from the page.
 Another rule in that same template can't match the same HTML fragment.
@@ -275,6 +279,11 @@ The following will tidy up the URLs based on a TALES expression ::
 
  $> bin/funnelweb --urltidy:link_expr="python:item['_path'].endswith('.html') and item['_path'][:-5] or item['_path']"
 
+If you'd like to move content around before it's uploaded you can use the urltidy step as well e.g. ::
+
+ $> bin/funnelweb --urltidy:link_expr=python:item['_path'].startswith('/news') and '/otn/news'+item['path'][5:] or item['_path']
+
+
 Plone Uploading
 ~~~~~~~~~~~~~~~
 
@@ -290,6 +299,15 @@ is set then the site will be crawled but not uploaded.
 If you'd like to change the type of what's uploaded ::
 
  $> bin/funnelweb --changetype:value=python:{'Folder':'HelpCenterReferenceManualSection','Document':HelpCenterLeafPage}.get(item['_type'],item['_type'])
+
+This will set a new value for the type of the item. You could make this conditional e.g ::
+
+ $> bin/funnelweb --changetype:condition=python:item['_path].startswith('/news')
+ 
+or by using a more complex expression for the new type
+
+ $> bin/funnelweb --changetype:value=python:item['_path'].startswith('/news') and 'NewNewsType' or item['_type]
+
 
 By default, funnelweb will automatically create Plone aliases based on the original crawled URLs, so that any old links
 will automatically be redirected to the new cleaned-up urls. You can disable this by ::
@@ -483,8 +501,36 @@ see http://github.com/collective/funnelweb/blob/master/funnelweb/runner/pipeline
 or type ::
 
  $> bin/funnelweb --pipeline
+ 
+Contributing
+~~~~~~~~~~~~
 
+The code of funnelweb itself is fairly minimal. It just sets up and runs a transmogrifier pipeline.
+The hard work is actually done by five packages which each contain one or more transmogrifier
+blueprints. These are:
 
+Webcrawler
+  http://pypi.python.org/pypi/transmogrify.webcrawler
+  https://github.com/djay/transmogrify.webcrawler
+
+HTMLContentExtractor
+  http://pypi.python.org/pypi/transmogrify.htmlcontentextractor
+  https://github.com/djay/transmogrify.htmlcontentextractor
+  
+SiteAnalyser
+  http://pypi.python.org/pypi/transmogrify.siteanalyser
+  https://github.com/djay/transmogrify.siteanalyser
+  
+PathSorter
+  http://pypi.python.org/pypi/transmogrify.pathsorter 
+  https://github.com/djay/transmogrify.pathsorter  
+  
+PloneRemote
+  http://pypi.python.org/pypi/transmogrify.ploneremote
+  https://github.com/djay/transmogrify.ploneremote
+  
+Each has it's own issue tracker and I will accept pull requests for new functionality or bug
+fixes. The current state of documentation and testing is not yet at a high level.
 
 
 
