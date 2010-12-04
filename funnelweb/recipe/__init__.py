@@ -22,6 +22,8 @@ class Recipe(Scripts):
             part,key = k.split('-',1)
             args.setdefault(part, {})[key] = v
         default = buildout['buildout']['directory']+'/var/cache'
+        
+        self.options['scripts'] = 'funnelweb=%s'%name
 
 
         self.options['eggs'] = """
