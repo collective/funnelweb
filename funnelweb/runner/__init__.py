@@ -12,6 +12,11 @@ import sys
 from optparse import OptionParser
 import ConfigParser
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+                    
+
 class Context:
     pass
 
