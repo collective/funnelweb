@@ -503,7 +503,11 @@ or type ::
  $> bin/funnelweb --pipeline
  
 Contributing
-~~~~~~~~~~~~
+------------
+
+- Code repository: http://github.com/collective/funnelweb
+- Questions and comments to http://github.com/collective/funnelweb/issues
+- Report bugs at http://github.com/collective/funnelweb/issues
 
 The code of funnelweb itself is fairly minimal. It just sets up and runs a transmogrifier pipeline.
 The hard work is actually done by five packages which each contain one or more transmogrifier
