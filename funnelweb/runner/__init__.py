@@ -9,12 +9,27 @@ except:
     from Products.Five import zcml
 import sys
 
+from optparse import OptionParser
+import ConfigParser
+
 class Context:
     pass
 
 
  
 def runner(args={}):
+    parser = OptionParser()
+    
+#    parser.add_option("-p", "--pipeline", dest="pipeline",
+#                  help="Transmogrifier pipeline.cfg to use", metavar="FILE")
+    
+#    (options, cargs) = parser.parse_args()
+#    if options.pipeline is None:
+#        config = resource_filename(__name__,'pipeline.cfg')
+#    else:
+#        config = options.get('pipeline')
+
+    
 
     for k,_,v in [a.partition('=') for a in sys.argv[1:]]:
         k = k.lstrip('--')
