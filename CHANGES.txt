@@ -1,4 +1,20 @@
 
+1.0b4 (2010-12-13)
+------------------
+
+- fix encoding problems caused by cache
+
+- better debugging
+
+- commandline to turn on debug info
+
+- script install uses buildout part name
+
+- extra documentation
+
+- commandline help
+
+
 1.0b3 (2010-11-20)
 ------------------
 

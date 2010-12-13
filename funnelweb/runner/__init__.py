@@ -9,7 +9,7 @@ except:
     from Products.Five import zcml
 import sys
 
-from optparse import OptionParser
+from optparse import OptionParser, OptionGroup
 import ConfigParser
 
 import logging
@@ -21,18 +21,47 @@ class Context:
     pass
 
 
+class NoErrorParser(OptionParser):
+    def error(self):
+        pass
  
 def runner(args={}):
     parser = OptionParser()
     
-#    parser.add_option("-p", "--pipeline", dest="pipeline",
-#                  help="Transmogrifier pipeline.cfg to use", metavar="FILE")
+    parser.add_option("-p", "--pipeline", dest="pipeline",
+                  help="Transmogrifier pipeline.cfg to use", metavar="FILE")
     
-#    (options, cargs) = parser.parse_args()
-#    if options.pipeline is None:
-#        config = resource_filename(__name__,'pipeline.cfg')
-#    else:
-#        config = options.get('pipeline')
+    pargs = [arg for arg in sys.argv[1:] if arg in ['--pipeline','-p']]
+    (options, cargs) = parser.parse_args(pargs)
+    if options.pipeline is None:
+        config = resource_filename(__name__,'pipeline.cfg')
+    else:
+        config = options.get('pipeline')
+    cparser = ConfigParser.RawConfigParser()
+    cparser.read(config)
+    for section in cparser.sections():
+        if section == 'transmogrifier':
+            continue
+        if cparser.has_option(section,'@doc'):
+            doc = cparser.get(section,'@doc')
+        else:
+            doc = ''
+        group = OptionGroup(parser, section, doc)
+        for key,value in cparser.items(section):
+            if key.startswith('@'):
+                if key == '@doc':
+                    continue
+                metavar,_,help = value.partition(': ')
+                if metavar.upper() == metavar:
+                    action = "store"
+                else:
+                    action = "store_true"
+                group.add_option("--%s:%s"%(section,key[1:]), action=action,
+                                             help=help,
+                                             metavar=metavar)
+        parser.add_option_group(group)
+    pargs = [arg for arg in sys.argv[1:] if not arg.startswith('--template') ]
+    (options, cargs) = parser.parse_args(pargs)
 
     
 
