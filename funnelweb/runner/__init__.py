@@ -39,7 +39,8 @@ def runner(args={}):
         config = options.get('pipeline')
     cparser = ConfigParser.RawConfigParser()
     cparser.read(config)
-    for section in cparser.sections():
+    pipeline = [p.strip() for p in cparser.get('transmogrifier','pipeline').split()]
+    for section in pipeline:
         if section == 'transmogrifier':
             continue
         if cparser.has_option(section,'@doc'):
@@ -56,6 +57,7 @@ def runner(args={}):
                     action = "store"
                 else:
                     action = "store_true"
+                    help = value
                 group.add_option("--%s:%s"%(section,key[1:]), action=action,
                                              help=help,
                                              metavar=metavar)
