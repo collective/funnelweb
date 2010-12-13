@@ -148,6 +148,10 @@ The site you crawl will be cached locally, so if you run funnelweb again it will
 to disable the local caching use ::
 
  $> bin/funnelweb --cache:output=
+ 
+If you'd like to reset the cache, refreshing it's data, set the crawlers cache to nothing ::
+
+ $> bin/funnelweb --crawler:cache=
 
 By default the cache is stored in ``var/funnelwebcache/{site url}/``. You can set this to another directory using::
 
@@ -197,6 +201,11 @@ Templates
 Funnelweb has a built-in clustering algorithm that tries to automatically extract the content from the HTML template.
 This is slow and not always effective. Often you will need to input your own template extraction rules.
 
+If you'd like to turn off the automatic templates ::
+
+ $> bin/funnelweb --templateauto:condition=python:False
+
+
 Rules are in the form of ::
 
   (title|description|text|anything) = (text|html|optional) XPath
@@ -227,12 +236,30 @@ Another rule in that same template can't match the same HTML fragment.
 If a content part is not useful to Plone (e.g. redundant text, title or description) it is a way to effectively remove that HTML
 from the content.
 
+To help debug your template rules you can set debug mode ::
+
+  $> bin/funnelweb --template1:debug --template2:debug
+
+Setting debug mode on templateauto will give you details about the rules it uses. ::
+
+  $> bin/funnelweb --templateauto:debug
+  ...
+  DEBUG:templateauto:'icft.html' discovered rules by clustering on 'http://...'
+  Rules:
+	text= html //div[@id = "dal_content"]//div[@class = "content"]//p
+	title= text //div[@id = "dal_content"]//div[@class = "content"]//h3
+  Text:
+	TITLE: ...
+	MAIN-10: ...
+	MAIN-10: ...
+	MAIN-10: ...
+
+
 For more information about XPath see
 
 - http://www.w3schools.com/xpath/default.asp
 - http://blog.browsermob.com/2009/04/test-your-selenium-xpath-easily-with-firebug/
 
-Note that spaces in XPaths must be escaped as ``&#32;``
 
 Site Analysis
 ~~~~~~~~~~~~~
@@ -388,6 +415,16 @@ convert a regular sphix documentation into remote plone content inside a PloneHe
     
     ploneupload-target=http://admin:admin@localhost/Plone
 
+
+Controlling Logging
+-------------------
+
+You can show additional debug output on any particular set by setting a debug commandline switch.
+For instance to see see additional details about template matching failures ::
+
+  $> bin/funnelweb --template1:debug
+  
+  
 
 Working directly with transmogrifier (advanced)
 -----------------------------------------------

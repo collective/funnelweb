@@ -14,7 +14,7 @@ import ConfigParser
 
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
                     
 
 class Context:
@@ -40,7 +40,11 @@ def runner(args={}):
         k = k.lstrip('--')
         if ':' in k:
             part,_,key = k.partition(':')
-            args.setdefault(part, {})[key] = v
+            if key.lower()=='debug':
+                logger = logging.getLogger(part)
+                logger.setLevel(logging.DEBUG)
+            else:
+                args.setdefault(part, {})[key] = v
         else:
             args[k] = v
 
