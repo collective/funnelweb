@@ -1,4 +1,11 @@
 
+1.0b5 (2010-12-13)
+------------------
+
+- fix ordering of commandline help
+
+- fix help for @debug
+
 1.0b4 (2010-12-13)
 ------------------
 
