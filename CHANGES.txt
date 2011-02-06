@@ -1,4 +1,21 @@
 
+1.0b6 (2011-02-06)
+------------------
+
+- turn off templateauto by default
+- added hideguess step. currently just manual setting of what to hide
+- multiline value overrides possible from commandline
+- files use file pointers to reduce memory usage
+- cache saves .metadata files to record and playback headersx
+- ploneremote: fix bug in debug output
+- show error if text is None
+- fix bug with bad chars in rewritten links
+- fix bug in losing items
+- templates: handle '/text()' in  xpaths
+- templates: new 'optionaltext' rule format
+- set default page on the import root
+
+
 1.0b5 (2010-12-13)
 ------------------
 

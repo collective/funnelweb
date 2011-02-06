@@ -1,7 +1,7 @@
 FunnelWeb - Content conversion made easy
 ****************************************
 
-Easily convert content from existing sites into Plone.
+Easily convert content from existing html into Plone.
 
 - Code repository: http://github.com/collective/funnelweb
 - Questions and comments to http://github.com/collective/funnelweb/issues
@@ -16,6 +16,10 @@ Funnelweb is very easy to get started with via a few settings in either buildout
 or the commandline. Funnelweb progresses crawler content through various steps to
 improve the quality of the final converted site. Each step and it's configuration options are
 well thought out and have proved useful on many site conversions over the years.
+
+If the source site is already a CMS such as Plone or drupal and you have access to the database
+there maybe other existing tools which can extract the structure and content of the site directly and could
+require less manual configuration.
 
 Funnelweb is also very flexible as it uses a modular transmormation framework underneath
 which advanced users can use if they they need further steps added to their conversion
@@ -224,7 +228,7 @@ For example ::
 
 Note that for a single template e.g. template1, ALL of the XPaths need to match otherwise
 that template will be skipped and the next template tried. If you'd like to make it
-so that a single XPath isn't nessary for the template to match then use the keyword `optional`
+so that a single XPath isn't nessary for the template to match then use the keyword `optional` or `optionaltext`
 instead of `text` or `html` before the XPath.
 
 
@@ -309,6 +313,11 @@ The following will tidy up the URLs based on a TALES expression ::
 If you'd like to move content around before it's uploaded you can use the urltidy step as well e.g. ::
 
  $> bin/funnelweb --urltidy:link_expr=python:item['_path'].startswith('/news') and '/otn/news'+item['path'][5:] or item['_path']
+
+If you want to hide content from navigation you can use `hideguess`
+
+ $> bin/funnelweb --hideguess:condition=python:item['path']=='musthide'
+
 
 
 Plone Uploading

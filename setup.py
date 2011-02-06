@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '1.0b4'
+version = '1.0b6'
 
 long_description = (
     read('README.rst')
@@ -56,11 +56,11 @@ setup(name='funnelweb',
                         'zc.buildout',
                         'zc.recipe.egg',
                         'collective.transmogrifier',
-                        'transmogrify.webcrawler>=1.0b4',
-                        'transmogrify.siteanalyser>=1.0b5',
-                        'transmogrify.htmlcontentextractor>=1.0b3',
-                        'transmogrify.pathsorter>=1.0b2',
-                        'transmogrify.ploneremote>=1.0b2',
+                        'transmogrify.webcrawler>=1.0b5',
+                        'transmogrify.siteanalyser>=1.0b7',
+                        'transmogrify.htmlcontentextractor>=1.0b4',
+                        'transmogrify.pathsorter>=1.0b3',
+                        'transmogrify.ploneremote>=1.0b3',
                         'Products.CMFCore',
                 'zope.app.pagetemplate',
                 'zope.app.component',
