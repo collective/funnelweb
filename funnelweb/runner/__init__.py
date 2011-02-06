@@ -3,16 +3,16 @@ from collective.transmogrifier.transmogrifier import Transmogrifier
 from pkg_resources import resource_string, resource_filename
 from collective.transmogrifier.transmogrifier import configuration_registry
 import funnelweb
+from optparse import OptionParser, OptionGroup
+
+import sys
+import ConfigParser
+
+import logging
 try:
     from Zope2.App import zcml
 except:
     from Products.Five import zcml
-import sys
-
-from optparse import OptionParser, OptionGroup
-import ConfigParser
-
-import logging
 
 logging.basicConfig(level=logging.INFO)
                     
@@ -66,7 +66,7 @@ def runner(args={}):
     (options, cargs) = parser.parse_args(pargs)
 
     
-
+    cargs = {}
     for k,_,v in [a.partition('=') for a in sys.argv[1:]]:
         k = k.lstrip('--')
         if ':' in k:
@@ -75,9 +75,15 @@ def runner(args={}):
                 logger = logging.getLogger(part)
                 logger.setLevel(logging.DEBUG)
             else:
-                args.setdefault(part, {})[key] = v
+                section = cargs.setdefault(part, {})
+                if key in section:
+                    section[key] = '%s\n%s' % (section[key],v)
+                else:
+                    section[key] = v
         else:
-            args[k] = v
+            cargs[k] = v
+            
+    args.update(cargs)
 
     config = resource_filename(__name__,'pipeline.cfg')
     if args.get('pipeline') == '':
