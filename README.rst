@@ -369,8 +369,8 @@ You can get a local file representation of what will be uploaded by using the fo
 Example: Sphinx to Plone
 ------------------------
 
-As an example the following buildout recipe will create a funnelweb script that will
-convert a regular sphix documentation into remote plone content inside a PloneHelpCenter ::
+As an example the following buildout will create a funnelweb script that will
+convert a regular sphinx documentation into remote Plone content inside a PloneHelpCenter ::
 
     [buildout]
     parts += sphnix funnelweb
@@ -388,7 +388,7 @@ convert a regular sphix documentation into remote plone content inside a PloneHe
       Pygments
 
 
-    [funnelweb]
+    [toplone]
     recipe = funnelweb
     crawler-url=file://${buildout:directory}/build/html
     crawler-ignore=
@@ -399,30 +399,36 @@ convert a regular sphix documentation into remote plone content inside a PloneHe
             genindex\.html
             search\.html
             saesrchindex\.js
+    # Since content is from disk, no need for local cache
     cache-output =
-    
-    # Permalinks are Sphinx's on-hover makers that are not used in Plone. We have this dummy rule here to parse 
-    # them out from body so that they do not corrupt "text" field
-    
+
+    # Fields with '_' won't be uploaded to Plone so will be effectively removed
     template1-title = text //div[@class='body']//h1[1]
     template1-_permalink = text //div[@class='body']//a[@class='headerlink']
     template1-text = html //div[@class='body']
-    template1-description = optional //div[contains(@class,'admonition-description')]//p[@class='last']
-                         //div[contains(@class,'admonition-description')]
-    templateauto-condition = python:False
-    
-    attachmentguess-condition = python: subitem.get('_type') in ['Image']
-    attachmentguess-defaultpage = index
-    
+    template1-_label = optional //p[contains(@class,'admonition-title')]
+    template1-description = optional //div[contains(@class,'admonition-description')]/p[@class='last']/text()
+    template1-_remove_useless_links = optional //div[@id = 'indices-and-tables']
+
+    # Images will get titles from backlink text
+    titleguess-condition = python:True
+
+    # Pages linked to content will be moved together
+    indexguess-condition = python:True
+
+    # Hide the images folder from navigation
+    hideguess-condition = python:item.get("_path","").startswith('_images') and item.get('_type')=='Folder'
+
+    # Upload as PHC instead of Folders and Pages
     changetype-value=python:{'Folder':'HelpCenterReferenceManualSection','Document':'HelpCenterLeafPage'}.get(item['_type'],item['_type'])
-    
+
+    # Save locally for debugging purposes
     localupload-output=${buildout:directory}/ploneout
-    
+
     # All folderish content should be checked if they contain
     # any items on the remote site which are not presented locally. including base folder
     ploneprune-condition=python:item.get('_type') in ['HelpCenterReferenceManualSection','HelpCenterReferenceManual'] or item['_path'] == ''
-    
-    ploneupload-target=http://admin:admin@localhost/Plone
+
 
 
 Controlling Logging
