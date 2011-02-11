@@ -64,8 +64,8 @@ History
 
 
 
-Options
--------
+Options and commandline
+-----------------------
 
 Funnelweb is organised as a series of steps through which crawled items pass before eventually being
 uploaded. Each step as one or more configuration options so you can customise import process
@@ -86,6 +86,12 @@ The configuration options can either be given as part of the buildout part e.g. 
 or the same option can be overridden via the command line ::
 
  $> bin/funnelweb --crawler:url=http://www.whitehouse.gov
+
+some options require multiple lines within a buildout part. These can be overridden
+via the commandline by repeating the same argument e.g. ::
+
+  $> bin/funnelweb --crawler:ignore=\.mp3 --crawler:ignore=\.pdf
+
 
 The full list of steps that can be configured is
 
@@ -109,6 +115,7 @@ The full list of steps that can be configured is
  -    indexguess
  -    titleguess
  -    attachmentguess
+ -    hideguess
  -    urltidy
  -    addfolders
  -    changetype
@@ -123,6 +130,12 @@ The full list of steps that can be configured is
  -    plonealias
  -    ploneprune
  -    localupload
+
+or you use the commandline help to view the list of available options ::
+
+  $> bin/funnelweb --help
+
+
 
 The most common configuration options for these steps are detailed below.
 
