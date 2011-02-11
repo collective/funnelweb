@@ -82,8 +82,8 @@ def runner(args={}):
                     section[key] = v
         else:
             cargs[k] = v
-            
-    args.update(cargs)
+    for k,v in cargs.items():
+        args.setdefault(k, {}).update(v)
 
     config = resource_filename(__name__,'pipeline.cfg')
     if args.get('pipeline') == '':
