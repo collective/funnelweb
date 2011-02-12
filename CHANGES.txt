@@ -1,4 +1,11 @@
 
+1.0b7 (2011-02-12)
+------------------
+- fix bug in commandline overrides
+- only open cache files when needed so don't run out of handles
+- follow http-equiv refresh links
+- don't strip html head
+
 1.0b6 (2011-02-06)
 ------------------
 
