@@ -465,11 +465,11 @@ commandline and recipe options refer to options in the pipeline.
 
 You can view pipeline and all its options via the following command ::
 
- $> bin/funnelweb --pipeline
+ $> bin/funnelweb --show-pipeline
 
 You can also save this pipeline and customise it for your own needs ::
 
- $> bin/funnelweb --pipeline > pipeline.cfg
+ $> bin/funnelweb --show-pipeline > pipeline.cfg
  $> {edit} pipeline.cfg
  $> bin/funnelweb --pipeline=pipeline.cfg
 

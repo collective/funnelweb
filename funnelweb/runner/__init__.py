@@ -28,16 +28,24 @@ class NoErrorParser(OptionParser):
 def runner(args={}):
     parser = OptionParser()
     
-    parser.add_option("-p", "--pipeline", dest="pipeline",
-                  help="Transmogrifier pipeline.cfg to use", metavar="FILE")
-
-    ispipeline = lambda arg: [a for a in ['--pipeline','-p'] if arg.startswith(a)]
+    parser.add_option("--pipeline", dest="pipeline",
+                  help="Transmogrifier pipeline.cfg to use",
+                  metavar="FILE"
+                  )
+    parser.add_option("--show-pipeline", dest="showpipeline",
+                      action = "store_true",
+                      help="Show contents of the pipeline"
+                      )
+    # Parse just the pipeline args
+    ispipeline = lambda arg: [a for a in ['--pipeline','--show-pipeline'] if arg.startswith(a)]
     pargs = [arg for arg in sys.argv[1:] if ispipeline(arg)]
     (options, cargs) = parser.parse_args(pargs)
-    if options.pipeline is None:
-        config = resource_filename(__name__,'pipeline.cfg')
-    else:
+    if options.pipeline is not None:
         config = options.pipeline
+    elif args.get('pipeline',None) is not None:
+        config = args['pipeline']
+    else:
+        config = resource_filename(__name__,'pipeline.cfg')
     cparser = ConfigParser.RawConfigParser()
     cparser.read(config)
     pipeline = [p.strip() for p in cparser.get('transmogrifier','pipeline').split()]
@@ -88,7 +96,7 @@ def runner(args={}):
         args.setdefault(k, {}).update(v)
 
     #config = resource_filename(__name__,'pipeline.cfg')
-    if args.get('pipeline') == '':
+    if options.showpipeline:
         f = open(config)
         print f.read()
         f.close()
