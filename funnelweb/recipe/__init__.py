@@ -17,10 +17,9 @@ class Recipe(Scripts):
         self.buildout, self.name, self.options = buildout, name, options
         args = {}
         for k,v in self.options.items():
-            if '-' not in k:
-                continue
-            part,key = k.split('-',1)
-            args.setdefault(part, {})[key] = v
+            if '-' in k:
+                part,key = k.split('-',1)
+                args.setdefault(part, {})[key] = v
         default = buildout['buildout']['directory']+'/var/cache'
         
         self.options['scripts'] = 'funnelweb=%s'%name
@@ -34,7 +33,11 @@ class Recipe(Scripts):
                 transmogrify.ploneremote
                 funnelweb
                 """ + self.options.get('eggs','')
-        self.options['arguments'] =  str(args)
+        pipeline = self.options.get('pipeline',None)
+        if pipeline:
+            self.options['arguments'] =  str(args)+',"'+pipeline+'"'
+        else:
+            self.options['arguments'] =  str(args)
         return  Scripts.__init__(self, buildout, name, options)
 
     def install(self):

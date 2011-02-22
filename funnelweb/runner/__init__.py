@@ -25,7 +25,7 @@ class NoErrorParser(OptionParser):
     def error(self):
         pass
  
-def runner(args={}):
+def runner(args={}, pipeline=None):
     parser = OptionParser()
     
     parser.add_option("--pipeline", dest="pipeline",
@@ -42,8 +42,8 @@ def runner(args={}):
     (options, cargs) = parser.parse_args(pargs)
     if options.pipeline is not None:
         config = options.pipeline
-    elif args.get('pipeline',None) is not None:
-        config = args['pipeline']
+    elif pipeline is not None:
+        config = pipeline
     else:
         config = resource_filename(__name__,'pipeline.cfg')
     cparser = ConfigParser.RawConfigParser()
