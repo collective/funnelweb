@@ -30,13 +30,14 @@ def runner(args={}):
     
     parser.add_option("-p", "--pipeline", dest="pipeline",
                   help="Transmogrifier pipeline.cfg to use", metavar="FILE")
-    
-    pargs = [arg for arg in sys.argv[1:] if arg in ['--pipeline','-p']]
+
+    ispipeline = lambda arg: [a for a in ['--pipeline','-p'] if arg.startswith(a)]
+    pargs = [arg for arg in sys.argv[1:] if ispipeline(arg)]
     (options, cargs) = parser.parse_args(pargs)
     if options.pipeline is None:
         config = resource_filename(__name__,'pipeline.cfg')
     else:
-        config = options.get('pipeline')
+        config = options.pipeline
     cparser = ConfigParser.RawConfigParser()
     cparser.read(config)
     pipeline = [p.strip() for p in cparser.get('transmogrifier','pipeline').split()]
@@ -81,11 +82,12 @@ def runner(args={}):
                 else:
                     section[key] = v
         else:
-            cargs[k] = v
+            pass
+            #cargs[k] = v
     for k,v in cargs.items():
         args.setdefault(k, {}).update(v)
 
-    config = resource_filename(__name__,'pipeline.cfg')
+    #config = resource_filename(__name__,'pipeline.cfg')
     if args.get('pipeline') == '':
         f = open(config)
         print f.read()
