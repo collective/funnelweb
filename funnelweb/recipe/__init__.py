@@ -36,7 +36,7 @@ class Recipe(Base):
                 funnelweb
                 """ + self.options.get('eggs','')
 
-        pipeline = self.options.setdefault('pipeline','funnelweb.pipeline')
+        pipeline = self.options.setdefault('pipeline','funnelweb.remote')
         self.options['arguments'] =  str(args)+',"'+pipeline+'"'
         return  Base.__init__(self, buildout, name, options)
 
