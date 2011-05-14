@@ -12,18 +12,39 @@ Easily convert content from existing html into Plone.
 Introduction
 ------------
 
-Funnelweb is very easy to get started with via a few settings in either buildout
-or the commandline. Funnelweb progresses crawler content through various steps to
-improve the quality of the final converted site. Each step and it's configuration options are
-well thought out and have proved useful on many site conversions over the years.
+FunnelWeb is a webcrawler which extracts website content such as titles, descriptions,
+images and content blocks from existing websites. It filters this content and uploads
+it into a new website which uses the `Plone`_ CMS. It gives you many options for adjusting
+how content is migrated. It is an invaluable tool when you want to migrate a site which doesn't
+use a CMS or there isn't a tool can migrate content directly from the sites database.
 
-If the source site is already a CMS such as Plone or drupal and you have access to the database
-there maybe other existing tools which can extract the structure and content of the site directly and could
-require less manual configuration.
-
-Funnelweb is also very flexible as it uses a modular transmormation framework underneath
+Funnelweb is also very flexible as it uses a modular `collective.transmogrifier`_ framework underneath
 which advanced users can use if they they need further steps added to their conversion
 process.
+
+The work performed by the funnelweb script can be broken down into four sections:
+
+1. Crawling the site including caching locally so subsequent crawls are quicker and filtering out
+   unwanted content
+2. Remove boilerplate/templates (automatically or via rules) so just content remains
+3. Analysing the site structure to improve the content quality including working out titles, default
+   views, types of objects to create, what to show in navigation etc
+4. Uploading to the CMS such as Plone, or saving cleaned HTML to local directory
+
+FunnelWeb now has two modes of operation:
+
+1. Within Plone itself via the `mr.migrator`_ plugin. see mr.migrator for how to install.
+
+2. A command line script which can be installed via zc.buildout. Content is uploaded
+   into `Plone`_ via it's web services API.
+
+
+Options and commandline
+-----------------------
+
+Funnelweb is very easy to get started with via a few settings in either buildout
+or the commandline. Funnelweb progresses crawler content through various steps to
+improve the quality of the final converted site.
 
 The simplest way to install is via a buildout recipe (see zc.buildout) ::
 
@@ -43,32 +64,8 @@ it to a local Plone site via XML-RPC. This can be run by ::
 
  $> bin/funnelweb
 
-The work performed by the funnelweb script can be broken down into four sections:
-
-1. Crawling the site including caching locally so subsequent crawls are quicker and filtering out
-   unwanted content
-2. Remove boilerplate/templates (automatically or via rules) so just content remains
-3. Analysing the site structure to improve the content quality including working out titles, default
-   views, types of objects to create, what to show in navigation etc
-4. Uploading to the CMS such as Plone, or saveing cleaned HTML to local directory
-
-
-History
--------
-
-- 2008 Built to import large corporate intranet
-- 2009 released pretaweb.funnelweb (deprecated). Built into Plone UI > Actions > Import
-- 2010 Split blueprints into transmogrify.* release on pypi
-- 2010 collective.developermanual sphinx to Plone uses funnelweb blueprints
-- 2010 funnelweb Recipe + Script released
-
-
-
-Options and commandline
------------------------
-
 Funnelweb is organised as a series of steps through which crawled items pass before eventually being
-uploaded. Each step as one or more configuration options so you can customise import process
+uploaded. Each step has one or more configuration options so you can customise import process
 for your needs. Almost all imports will require some level of configurations.
 
 The first part of each configuration key is the step e.g. `crawler`. The second part is the particular
@@ -134,7 +131,6 @@ The full list of steps that can be configured is
 or you use the commandline help to view the list of available options ::
 
   $> bin/funnelweb --help
-
 
 
 The most common configuration options for these steps are detailed below.
@@ -562,7 +558,7 @@ condition statements etc. as well as your own blueprints.
 The Funnelweb Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~
 
-see http://github.com/collective/funnelweb/blob/master/funnelweb/runner/pipeline.cfg
+see http://github.com/collective/funnelweb/blob/master/funnelweb/remote.cfg
 or type ::
 
  $> bin/funnelweb --pipeline
@@ -598,9 +594,24 @@ PloneRemote
   http://pypi.python.org/pypi/transmogrify.ploneremote
   https://github.com/djay/transmogrify.ploneremote
   
-Each has it's own issue tracker and I will accept pull requests for new functionality or bug
+Each has it's own issue tracker and we will accept pull requests for new functionality or bug
 fixes. The current state of documentation and testing is not yet at a high level.
 
 
+History
+-------
 
+- 2008 Built to import large corporate intranet
+- 2009 released pretaweb.funnelweb (deprecated). Built into Plone UI > Actions > Import
+- 2010 Split blueprints into transmogrify.* release on pypi
+- 2010 collective.developermanual sphinx to Plone uses funnelweb blueprints
+- 2010 funnelweb Recipe + Script released
+- 2011 split runner out into mr.migrator
+
+
+
+
+.. _`collective.transmogrifier`: http://pypi.python.org/pypi/collective.transmogrifier
+.. _`Plone`: http://plone.org
+.. _`mr.migrator`: http://pypi.python.org/pypi/mr.migrator
 
