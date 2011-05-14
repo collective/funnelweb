@@ -6,11 +6,12 @@ from urllib import pathname2url as url
 from sys import argv
 import logging
 from pkg_resources import resource_string, resource_filename
+from mr.migrator.recipe import Recipe as Base
 
 
 logging.basicConfig(level=logging.DEBUG)
 
-class Recipe(Scripts):
+class Recipe(Base):
     """zc.buildout recipe"""
 
     def __init__(self, buildout, name, options):
@@ -26,6 +27,7 @@ class Recipe(Scripts):
 
 
         self.options['eggs'] = """
+                mr.migrator
                 transmogrify.webcrawler
                 transmogrify.siteanalyser
                 transmogrify.htmlcontentextractor
@@ -33,12 +35,10 @@ class Recipe(Scripts):
                 transmogrify.ploneremote
                 funnelweb
                 """ + self.options.get('eggs','')
-        pipeline = self.options.get('pipeline',None)
-        if pipeline:
-            self.options['arguments'] =  str(args)+',"'+pipeline+'"'
-        else:
-            self.options['arguments'] =  str(args)
-        return  Scripts.__init__(self, buildout, name, options)
+
+        pipeline = self.options.setdefault('pipeline','funnelweb.pipeline')
+        self.options['arguments'] =  str(args)+',"'+pipeline+'"'
+        return  Base.__init__(self, buildout, name, options)
 
     def install(self):
         """Installer"""
@@ -49,8 +49,8 @@ class Recipe(Scripts):
 
         # Return files that were created by the recipe. The buildout
         # will remove all returned files upon reinstall.
-        return Scripts.install(self)
+        return Base.install(self)
 
     def update(self):
         """Updater"""
-        return Scripts.update(self)
+        return Base.update(self)

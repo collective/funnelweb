@@ -1,12 +1,24 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="funnelweb"
     >
 
     <include package="zope.app.component" file="meta.zcml"/>
     <include package="collective.transmogrifier" file="meta.zcml"/>
     <include package="collective.transmogrifier.sections"/>
-    <include package="z3c.autoinclude" file="meta.zcml" />
-    <includePlugins package="transmogrify"/>
+
+    <transmogrifier:registerConfig
+         name="funnelweb.pipeline"
+         title="Funnelweb migration of static site"
+         configuration="runner/pipeline.cfg"
+         />
+    <transmogrifier:registerConfig
+         name="funnelweb.internal"
+         title="Funnelweb migration of static site"
+         configuration="funnelweb.cfg"
+         />
+
+
 
 </configure>

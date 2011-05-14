@@ -26,9 +26,7 @@ long_description = (
    'Download\n'
     '********\n'
     )
-entry_point = 'funnelweb.recipe:Recipe'
-entry_points = {"zc.buildout": ["default = %s" % entry_point],
-                'console_scripts': ['funnelweb = funnelweb.runner:runner']}
+
 
 tests_require=['zope.testing', 'zc.buildout']
 
@@ -49,7 +47,7 @@ setup(name='funnelweb',
       url='http://pypi.python.org/pypi/funnelweb',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['funnelweb'],
+      namespace_packages=[],
       include_package_data=True,
       zip_safe=False,
       install_requires=['setuptools',
@@ -62,13 +60,18 @@ setup(name='funnelweb',
                         'transmogrify.pathsorter>=1.0b3',
                         'transmogrify.ploneremote>=1.0b3',
                         'Products.CMFCore',
-                'zope.app.pagetemplate',
-                'zope.app.component',
+                        'zope.app.pagetemplate',
+                        'zope.app.component',
+                        'mr.migrator',
           'z3c.autoinclude'
                         # -*- Extra requirements: -*-
                         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
       test_suite = 'funnelweb.recipe.tests.test_docs.test_suite',
-      entry_points=entry_points,
+      entry_points = {"zc.buildout": ["default = funnelweb.recipe:Recipe"],
+                      'console_scripts': ['funnelweb = mr.migrator.runner:runner'],
+                      "z3c.autoinclude.plugin":['target = plone'],
+                      "z3c.autoinclude.plugin":['target = transmogrify'],
+                      },
       )
