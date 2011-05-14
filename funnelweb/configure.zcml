@@ -9,14 +9,14 @@
     <include package="collective.transmogrifier.sections"/>
 
     <transmogrifier:registerConfig
-         name="funnelweb.pipeline"
+         name="funnelweb.remote"
          title="Funnelweb migration of static site"
-         configuration="runner/pipeline.cfg"
+         configuration="remote.cfg"
          />
     <transmogrifier:registerConfig
-         name="funnelweb.internal"
+         name="funnelweb.ttw"
          title="Funnelweb migration of static site"
-         configuration="funnelweb.cfg"
+         configuration="ttw.cfg"
          />
 
 
