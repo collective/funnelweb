@@ -1,3 +1,16 @@
+1.0 (2011-06-29)
+----------------
+
+-    fix default cmd line pipeline to funnelweb.remote
+-    remove runner code and checkin ttw.cfg
+-    funnelweb now depends on mr.migrator
+-    improve urltidy to handle .asp .php
+-    include index.asp and index.php as default pages
+-    handle override pipeline in buildout
+-    add --show-pipeline command
+-    fix handling of --pipeline
+
+
 
 1.0b7 (2011-02-12)
 ------------------
