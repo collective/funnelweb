@@ -562,6 +562,22 @@ see http://github.com/collective/funnelweb/blob/master/funnelweb/remote.cfg
 or type ::
 
  $> bin/funnelweb --pipeline
+
+
+Typical Scenario
+----------------
+
+1. First set up buildout to make a command line funnelweb
+2. crawl the whole site into your cache
+3. Crawl the first 10 pages
+4. try the auto template
+5. create your templates by looking at html in the cache and making some xpaths
+6. clean up urls.
+7. get some better titles
+8. clean up structure
+10. test html in a local folder
+11. bake in cmdline parms into buildout
+
  
 Contributing
 ------------
