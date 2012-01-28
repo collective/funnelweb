@@ -152,7 +152,7 @@ This URL must be the URL which all the other URLs you want from the site start w
 
 For example ::
 
- $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:maxsize=50  --ploneupload=http://admin:admin@localhost:8080/Plone
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:maxsize=50 --ploneupload:target=http://admin:admin@localhost:8080/Plone
 
 will restrict the crawler to the first 50 pages and then convert the content
 into a local Plone site.
