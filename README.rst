@@ -3,9 +3,9 @@ FunnelWeb - Content conversion made easy
 
 Easily convert content from existing html into Plone.
 
-- Code repository: http://github.com/collective/funnelweb
-- Questions and comments to http://github.com/collective/funnelweb/issues
-- Report bugs at http://github.com/collective/funnelweb/issues
+:Code repository: http://github.com/collective/funnelweb
+:Questions and comments to: http://github.com/collective/funnelweb/issues
+:Report bugs at: http://github.com/collective/funnelweb/issues
 
 .. contents::
 
@@ -18,33 +18,31 @@ it into a new website which uses the `Plone`_ CMS. It gives you many options for
 how content is migrated. It is an invaluable tool when you want to migrate a site which doesn't
 use a CMS or there isn't a tool can migrate content directly from the sites database.
 
-Funnelweb is also very flexible as it uses a modular `collective.transmogrifier`_ framework underneath
-which advanced users can use if they they need further steps added to their conversion
+For those familar with `collective.transmogrifier`_, funnelweb is a prebuilt pipeline that combines
+blueprints from four different packages (`transmogrify.webcrawler`_, `transmogrify.htmlcontentextractor`_
+`transmogrify.siteanalyser`_ and `transmogrify.ploneremote`_). Due to the flexible nature of the
+`collective.transmogrifier`_ framework underneath advanced users can add further steps to their conversion
 process.
 
 The work performed by the funnelweb script can be broken down into four sections:
 
 1. Crawling the site including caching locally so subsequent crawls are quicker and filtering out
-   unwanted content
-2. Remove boilerplate/templates (automatically or via rules) so just content remains
+   unwanted content (`transmogrify.webcrawler`_)
+2. Remove boilerplate/templates (automatically or via rules) so just content remains (`transmogrify.htmlcontentextractor`_)
 3. Analysing the site structure to improve the content quality including working out titles, default
-   views, types of objects to create, what to show in navigation etc
-4. Uploading to the CMS such as Plone, or saving cleaned HTML to local directory
+   views, types of objects to create, what to show in navigation etc (`transmogrify.siteanalyser`_)
+4. Uploading to the CMS such as Plone, or saving cleaned HTML to local directory (`transmogrify.ploneremote`_)
 
-FunnelWeb now has two modes of operation:
+FunnelWeb uses the `mr.migrator`_ framework which allows it's funnelweb `collective.transmogrifier`_ pipeline to be run:
 
-1. Within Plone itself via the `mr.migrator`_ plugin. see mr.migrator for how to install.
+1. Within Plone itself . see `mr.migrator`_ for how to install.
 
 2. A command line script which can be installed via zc.buildout. Content is uploaded
    into `Plone`_ via it's web services API.
 
 
-Options and commandline
------------------------
-
-Funnelweb is very easy to get started with via a few settings in either buildout
-or the commandline. Funnelweb progresses crawler content through various steps to
-improve the quality of the final converted site.
+Installation for commandline
+----------------------------
 
 The simplest way to install is via a buildout recipe (see zc.buildout) ::
 
@@ -53,36 +51,52 @@ The simplest way to install is via a buildout recipe (see zc.buildout) ::
 
   [funnelweb]
   recipe = funnelweb
-  crawler-url=http://www.whitehouse.gov
-  ploneupload-target=http://admin:admin@localhost:8080/Plone
 
   $> buildout init
   $> bin/buildout
 
-The above example will create a script to import content from the whitehouse.gov and upload
-it to a local Plone site via XML-RPC. This can be run by ::
+
+This can be run by ::
 
  $> bin/funnelweb
+
+
+Configuration for commandline
+-----------------------------
 
 Funnelweb is organised as a series of steps through which crawled items pass before eventually being
 uploaded. Each step has one or more configuration options so you can customise import process
 for your needs. Almost all imports will require some level of configurations.
 
-The first part of each configuration key is the step e.g. `crawler`. The second part is the particular
-configuration option for that particular step. e.g. `url`. This is then followed by = and value or values.
+Funnelweb gives three methods to configure your pipeline.
 
-The configuration options can either be given as part of the buildout part e.g. ::
+Saving and modifying the pipeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  [buildout]
-  parts += funnelweb
+You can view pipeline and all its options via the following command ::
 
-  [funnelweb]
-  recipe = funnelweb
-  crawler-url=http://www.whitehouse.gov
+ $> bin/funnelweb --show-pipeline
 
-or the same option can be overridden via the command line ::
+You can also save this pipeline and customise it for your own needs ::
+
+ $> bin/funnelweb --show-pipeline > pipeline.cfg
+ $> {edit} pipeline.cfg
+ $> bin/funnelweb --pipeline=pipeline.cfg
+
+
+
+Commandline arguments
+~~~~~~~~~~~~~~~~~~~~~
+
+Any arguement from the pipeline can be overridden via the command-line
+
+e.g ::
 
  $> bin/funnelweb --crawler:url=http://www.whitehouse.gov
+
+All arguments are --(step:argument)=value.
+The first part of each configuration key is the step e.g. `crawler`. The second part is the particular
+configuration option for that particular step. e.g. `url`. This is then followed by = and value or values.
 
 some options require multiple lines within a buildout part. These can be overridden
 via the commandline by repeating the same argument e.g. ::
@@ -90,43 +104,110 @@ via the commandline by repeating the same argument e.g. ::
   $> bin/funnelweb --crawler:ignore=\.mp3 --crawler:ignore=\.pdf
 
 
+You can see a list of all the arguments via ::
+
+ $> bin/funnelweb --help
+
+
+Buildout Override
+~~~~~~~~~~~~~~~~~
+
+Any command-line override can also be "baked" into the funnelweb script. e.g. ::
+
+  [buildout]
+  parts += funnelweb
+
+  [funnelweb]
+  recipe = funnelweb
+  crawler-url=http://www.whitehouse.gov
+  pipeline=pipeline.cfg
+
+
+Recommended Usage
+-----------------
+
+Below is an outline of how you might typically use funnelweb.
+
+1. First set up buildout to make a command line funnelweb
+2. Save a copy of the pipeline ready to modify (see `Saving and modifying the pipeline`_)
+3. Bake pipeline file into buildout (see `Buildout Override`_)
+4. Test crawl your site and store it into the cache (see `Crawling - HTML to import`_)
+5. You might need to set some crawler:ignore rules
+6. crawl the whole site into your cache (see `Crawling - HTML to import`_)
+7. Crawl the first 10 pages using --crawler:maxsize=10
+8. Use `Templates`_ in debug mode to find Title, Description and Text your pages
+9. `Upload to Plone`_ to test
+10. if the structure and urls are what you expect use `Site Analysis`_
+11. Repeat crawling more pages
+
+
+Configuration Options
+---------------------
+
 The full list of steps that can be configured is
 
 1. Crawling
 
- -    crawler
- -    cache
- -    typeguess
- -    drop
+:crawler: `transmogrify.webcrawler`_
+:cache: `transmogrify.webcrawler.cache`_
+:typeguess: `transmogrify.webcrawler.typerecognitor`_
+:drop: `collective.transmogrifier.sections.condition`_
 
 2. Templates
 
- -    template1
- -    template2
- -    template3
- -    template4
- -    templateauto
+:template1: `transmogrify.htmlcontentextractor`_
+:template2: `transmogrify.htmlcontentextractor`_
+:template3: `transmogrify.htmlcontentextractor`_
+:template4: `transmogrify.htmlcontentextractor`_
+:templateauto: `transmogrify.htmlcontentextractor.auto`_
 
 3. Site Analysis
 
- -    indexguess
- -    titleguess
- -    attachmentguess
- -    hideguess
- -    urltidy
- -    addfolders
- -    changetype
+:sitemapper: `transmogrify.siteanalyser.sitemapper`_
+:indexguess: `transmogrify.siteanalyser.defaultpage`_
+:titleguess: `transmogrify.siteanalyser.title`_
+:attachmentguess: `transmogrify.siteanalyser.attach`_
+:hideguess: `transmogrify.siteanalyser.hidefromnav`_
+:urltidy: `transmogrify.siteanalyser.urltidy`_
+:addfolders: `transmogrify.pathsorter`_
+:changetype: `collective.transmogrifier.sections.inserter`_
 
 4. Uploading
 
- -    ploneupload
- -    ploneupdate
- -    plonehide
- -    publish
- -    plonepublish
- -    plonealias
- -    ploneprune
- -    localupload
+:ploneupload: `transmogrify.ploneremote.remoteconstructor`_
+:ploneupdate: `transmogrify.ploneremote.remoteschemaupdater`_
+:plonehide: `transmogrify.ploneremote.remotenavigationexcluder`_
+:publish: `collective.transmogrifier.sections.inserter`_
+:plonepublish: `transmogrify.ploneremote.remoteworkflowupdater`_
+:plonealias: `transmogrify.ploneremote.remoteredirector`_
+:ploneprune: `transmogrify.ploneremote.remoteprune`_
+:localupload: `transmogrify.webcrawler.cache`_
+
+.. _transmogrify.webcrawler: http://pypi.python.org/pypi/transmogrify.webcrawler#transmogrify-webcrawler
+.. _transmogrify.webcrawler.cache: http://pypi.python.org/pypi/transmogrify.webcrawler#transmogrify-webcrawler-cache
+.. _transmogrify.webcrawler.typerecognitor: http://pypi.python.org/pypi/transmogrify.webcrawler#transmogrify-webcrawler-typerecognitor
+.. _collective.transmogrifier.sections.condition: http://pypi.python.org/pypi/collective.transmogrifier#condition
+
+.. _transmogrify.htmlcontentextractor: http://pypi.python.org/pypi/transmogrify.htmlcontentextractor#transmogrify-htmlcontentextractor
+.. _transmogrify.htmlcontentextractor.auto: http://pypi.python.org/pypi/transmogrify.htmlcontentextractor#transmogrify-htmlcontentextractor.auto
+
+.. _transmogrify.siteanalyser: http://pypi.python.org/pypi/transmogrify.siteanalyser
+.. _transmogrify.siteanalyser.sitemapper: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-sitemapper
+.. _`transmogrify.siteanalyser.defaultpage`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-defaultpage
+.. _`transmogrify.siteanalyser.title`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-title
+.. _`transmogrify.siteanalyser.attach`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-attach
+.. _`transmogrify.siteanalyser.hidefromnav`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-hidefromnav
+.. _`transmogrify.siteanalyser.urltidy`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-siteanalyser-urltidy
+.. _`transmogrify.pathsorter`: http://pypi.python.org/pypi/transmogrify.siteanalyser#transmogrify-pathsorter
+.. _collective.transmogrifier.sections.inserter: http://pypi.python.org/pypi/collective.transmogrifier#inserter
+
+.. _`transmogrify.ploneremote`: http://pypi.python.org/pypi/transmogrify.ploneremote
+.. _`transmogrify.ploneremote.remoteconstructor`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remoteconstructor
+.. _`transmogrify.ploneremote.remoteschemaupdater`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remoteschemaupdater
+.. _`transmogrify.ploneremote.remotenavigationexcluder`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remotenavigationexcluder
+.. _`transmogrify.ploneremote.remoteworkflowupdater`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remoteworkflowupdater
+.. _`transmogrify.ploneremote.remoteredirector`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remoteredirector
+.. _`transmogrify.ploneremote.remoteprune`: http://pypi.python.org/pypi/transmogrify.ploneremote#transmogrify-ploneremote-remoteprune
 
 or you use the commandline help to view the list of available options ::
 
@@ -329,7 +410,7 @@ If you want to hide content from navigation you can use `hideguess`
 
 
 
-Plone Uploading
+Upload to Plone
 ~~~~~~~~~~~~~~~
 
 Uploading happens via remote XML-RPC calls so can be done to a live running site anywhere.
@@ -500,9 +581,9 @@ in its ``setup.py`` ::
    process such as those in `plone.app.transmogrifier` (see http://pypi.python.org/pypi/plone.app.transmogrifier).  Funnelweb
    doesn't run inside a Plone process so these blueprints won't work. If
    you want upload content into Plone, you can instead use
-   transmogrify.ploneremote which provides alternative implementations
+   `transmogrify.ploneremote`_ which provides alternative implementations
    which will upload content remotely via XML-RPC.
-   ``transmogrify.ploneremote`` is already included in funnelweb as it is
+   `transmogrify.ploneremote`_ is already included in funnelweb as it is
    what funnelweb's default pipeline uses.
 
 Attributes available in funnelweb pipeline
@@ -563,20 +644,6 @@ or type ::
 
  $> bin/funnelweb --pipeline
 
-
-Typical Scenario
-----------------
-
-1. First set up buildout to make a command line funnelweb
-2. crawl the whole site into your cache
-3. Crawl the first 10 pages
-4. try the auto template
-5. create your templates by looking at html in the cache and making some xpaths
-6. clean up urls.
-7. get some better titles
-8. clean up structure
-10. test html in a local folder
-11. bake in cmdline parms into buildout
 
  
 Contributing
