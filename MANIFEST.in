@@ -1,0 +1,2 @@
+include *.cfg *.py *.rst *.txt
+recursive-include funnelweb *.cfg *.py *.zcml
