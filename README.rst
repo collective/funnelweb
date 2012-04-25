@@ -49,7 +49,15 @@ FunnelWeb uses the `mr.migrator`_ framework which allows it's funnelweb `collect
 Installation for commandline
 ----------------------------
 
-The simplest way to install is via a buildout recipe (see zc.buildout) ::
+You can install via easy_install ::
+
+  $> easy_install funnelweb
+
+This can be run by ::
+
+  $> buildout
+
+Or funnelweb can be installed via a buildout recipe (see `zc.buildout`_) ::
 
   [buildout]
   parts += funnelweb
@@ -65,6 +73,7 @@ This can be run by ::
 
  $> bin/funnelweb
 
+The examples here will assume installation via buildout
 
 Configuration for commandline
 -----------------------------
