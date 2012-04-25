@@ -176,7 +176,7 @@ Recommended Usage
 Below is an outline of how you might typically use funnelweb.
 
 1. First set up buildout to make a command line funnelweb
-2. Save a copy of the pipeline ready to modify (see `Using a local pipeline configuration`_)
+2. Create a pipeline.cfg including funnelweb.remote (see `Using a local pipeline configuration`_)
 3. Bake pipeline file into buildout (see `Buildout Override`_)
 4. Test crawl your site and store it into the cache (see `Crawling - HTML to import`_)
 5. You might need to set some crawler:ignore rules
