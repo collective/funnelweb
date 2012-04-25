@@ -75,6 +75,8 @@ This can be run by ::
 
 The examples here will assume installation via buildout
 
+.. _`zc.buildout`: http://www.buildout.org
+
 Configuration for commandline
 -----------------------------
 
@@ -98,7 +100,9 @@ For example, create a file called pipeline.cfg with the following ::
     [crawler]
     url=http://collective-docs.readthedocs.org/en/latest/
 
-This will override the crawler blueprint setting "url".
+This will override the crawler blueprint setting "url". You can run this by ::
+
+  $> bin/funnelweb --pipeline=pipeline.cfg
 
 You can view funnelweb.remote pipeline and all its options via the following command ::
 
@@ -172,7 +176,7 @@ Recommended Usage
 Below is an outline of how you might typically use funnelweb.
 
 1. First set up buildout to make a command line funnelweb
-2. Save a copy of the pipeline ready to modify (see `Saving and modifying the pipeline`_)
+2. Save a copy of the pipeline ready to modify (see `Using a local pipeline configuration`_)
 3. Bake pipeline file into buildout (see `Buildout Override`_)
 4. Test crawl your site and store it into the cache (see `Crawling - HTML to import`_)
 5. You might need to set some crawler:ignore rules
