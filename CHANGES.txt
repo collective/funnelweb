@@ -1,5 +1,12 @@
-1.1 (Unreleased)
+1.1 (2011-04-28)
 ----------------
+
+- set default pipeline so can be used without buildout [djay]
+- better documentation [djay]
+- change recommended way to use funnelweb [djay]
+- new sitemapper step [djay]
+- can now crawl get requests [djay]
+- various fixes in transmogrify.* dependencies. see change logs [djay]
 
 1.0 (2011-06-29)
 ----------------
