@@ -5,7 +5,12 @@ Easily convert content from existing html into Plone.
 
 :Code repository: http://github.com/collective/funnelweb
 :Questions and comments to: http://github.com/collective/funnelweb/issues
-:Report bugs at: http://github.com/collective/funnelweb/issues
+:Report bugs at:
+  http://github.com/collective/funnelweb/issues
+  https://github.com/collective/transmogrify.webcrawler/issues
+  https://github.com/collective/transmogrify.htmlcontentextractor/issues
+  https://github.com/collective/transmogrify.siteanalyser/issues
+  https://github.com/collective/transmogrify.ploneremote/issues
 
 .. contents::
 
@@ -70,10 +75,23 @@ for your needs. Almost all imports will require some level of configurations.
 
 Funnelweb gives three methods to configure your pipeline.
 
-Saving and modifying the pipeline
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using a local pipeline configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can view pipeline and all its options via the following command ::
+You can create your own pipeline.cfg that overrides and extends the default funnelweb
+pipeline.
+
+For example, create a file called pipeline.cfg with the following ::
+
+    [transmogrifier]
+    include = funnelweb.remote
+
+    [crawler]
+    url=http://collective-docs.readthedocs.org/en/latest/
+
+This will override the crawler blueprint setting "url".
+
+You can view funnelweb.remote pipeline and all its options via the following command ::
 
  $> bin/funnelweb --show-pipeline
 
@@ -123,6 +141,22 @@ Any command-line override can also be "baked" into the funnelweb script. e.g. ::
   pipeline=pipeline.cfg
 
 
+Any paramater of the form ::
+
+  [step]
+  blah = blah
+
+will become in buildout ::
+
+  [funnelweb]
+  recipe = funnelweb
+  step-blah = blah
+
+and on the command line ::
+
+  bin/funnelweb --step:blah=blah
+
+
 Recommended Usage
 -----------------
 
@@ -144,7 +178,8 @@ Below is an outline of how you might typically use funnelweb.
 Configuration Options
 ---------------------
 
-The full list of steps that can be configured is
+The full list of steps that can be configured along with the transmogrifier
+blueprint for each
 
 1. Crawling
 
@@ -233,7 +268,7 @@ This URL must be the URL which all the other URLs you want from the site start w
 
 For example ::
 
- $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:maxsize=50 --ploneupload:target=http://admin:admin@localhost:8080/Plone
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:maxsize=50  --ploneupload=http://admin:admin@localhost:8080/Plone
 
 will restrict the crawler to the first 50 pages and then convert the content
 into a local Plone site.
@@ -456,32 +491,25 @@ You can get a local file representation of what will be uploaded by using the fo
 
  $> bin/funnelweb --localupload:output=var/mylocaldir
  
-Example: Sphinx to Plone
-------------------------
+Examples
+--------
+
+Feel free to fork and add your own examples for extracting content for common sites or
+CMS's
+
+Read The Docs
+~~~~~~~~~~~~~
 
 As an example the following buildout will create a funnelweb script that will
-convert a regular sphinx documentation into remote Plone content inside a PloneHelpCenter ::
+convert a regular sphinx documentation into remote Plone content
+inside a PloneHelpCenter ::
 
-    [buildout]
-    parts += sphnix funnelweb
+    [transmogrifier]
+    include = funnelweb.remote
 
-    [sphinx]
-    recipe = collective.recipe.sphinxbuilder
-    #doc-directory = .
-    outputs = html
-    source = ${buildout:directory}/source
-    build = ${buildout:directory}/build
-    eggs =
-      Sphinx
-      Docutils
-      roman
-      Pygments
-
-
-    [toplone]
-    recipe = funnelweb
-    crawler-url=file://${buildout:directory}/build/html
-    crawler-ignore=
+    [crawler]
+    url=http://collective-docs.readthedocs.org/en/latest/
+    ignore=
             cgi-bin
             javascript:
             _static
@@ -489,37 +517,60 @@ convert a regular sphinx documentation into remote Plone content inside a PloneH
             genindex\.html
             search\.html
             saesrchindex\.js
-    # Since content is from disk, no need for local cache
-    cache-output =
 
+    [template1]
+    title = text //div[@class='body']//h1[1]
+    description = optional //div[contains(@class,'admonition-description')]/p[@class='last']/text()
+    text = html //div[@class='body']
     # Fields with '_' won't be uploaded to Plone so will be effectively removed
-    template1-title = text //div[@class='body']//h1[1]
-    template1-_permalink = text //div[@class='body']//a[@class='headerlink']
-    template1-text = html //div[@class='body']
-    template1-_label = optional //p[contains(@class,'admonition-title')]
-    template1-description = optional //div[contains(@class,'admonition-description')]/p[@class='last']/text()
-    template1-_remove_useless_links = optional //div[@id = 'indices-and-tables']
+    _permalink = text //div[@class='body']//a[@class='headerlink']
+    _label = optional //p[contains(@class,'admonition-title')]
+    _remove_useless_links = optional //div[@id = 'indices-and-tables']
 
     # Images will get titles from backlink text
-    titleguess-condition = python:True
+    [titleguess]
+    condition = python:True
 
     # Pages linked to content will be moved together
-    indexguess-condition = python:True
+    [indexguess]
+    condition = python:True
 
     # Hide the images folder from navigation
-    hideguess-condition = python:item.get("_path","").startswith('_images') and item.get('_type')=='Folder'
+    [hideguess]
+    condition = python:item.get("_path","").startswith('_images') and item.get('_type')=='Folder'
 
     # Upload as PHC instead of Folders and Pages
-    changetype-value=python:{'Folder':'HelpCenterReferenceManualSection','Document':'HelpCenterLeafPage'}.get(item['_type'],item['_type'])
+    [changetype]
+    value=python:{'Folder':'HelpCenterReferenceManualSection','Document':'HelpCenterLeafPage'}.get(item['_type'],item['_type'])
 
     # Save locally for debugging purposes
-    localupload-output=${buildout:directory}/ploneout
+    [localupload]
+    output=manual
 
     # All folderish content should be checked if they contain
     # any items on the remote site which are not presented locally. including base folder
-    ploneprune-condition=python:item.get('_type') in ['HelpCenterReferenceManualSection','HelpCenterReferenceManual'] or item['_path'] == ''
+    [ploneprune]
+    condition=python:item.get('_type') in ['HelpCenterReferenceManualSection','HelpCenterReferenceManual'] or item['_path'] == ''
 
+Joomla
+~~~~~~
 
+#TODO
+
+Wordpress
+~~~~~~~~~
+
+#TODO
+
+Drupal
+~~~~~~
+
+#TODO
+
+Others
+~~~~~~
+
+Add your own examples here
 
 Controlling Logging
 -------------------
@@ -642,7 +693,7 @@ The Funnelweb Pipeline
 see http://github.com/collective/funnelweb/blob/master/funnelweb/remote.cfg
 or type ::
 
- $> bin/funnelweb --pipeline
+ $> bin/funnelweb --show-pipeline
 
 
  
