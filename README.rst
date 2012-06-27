@@ -181,7 +181,7 @@ Below is an outline of how you might typically use funnelweb.
 4. Test crawl your site and store it into the cache (see `Crawling - HTML to import`_)
 5. You might need to set some crawler:ignore rules
 6. crawl the whole site into your cache (see `Crawling - HTML to import`_)
-7. Crawl the first 10 pages using --crawler:maxsize=10
+7. Crawl the first 10 pages using --crawler:max=10
 8. Use `Templates`_ in debug mode to find Title, Description and Text your pages
 9. `Upload to Plone`_ to test
 10. if the structure and urls are what you expect use `Site Analysis`_
@@ -281,7 +281,7 @@ This URL must be the URL which all the other URLs you want from the site start w
 
 For example ::
 
- $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:maxsize=50  --ploneupload=http://admin:admin@localhost:8080/Plone
+ $> bin/funnelweb --crawler:url=http://www.whitehouse.gov --crawler:max=50  --ploneupload=http://admin:admin@localhost:8080/Plone
 
 will restrict the crawler to the first 50 pages and then convert the content
 into a local Plone site.
@@ -311,7 +311,7 @@ the you can set this as the cache. The crawler will always look up the cache fir
 
 The following will not crawl anything larger than 4Mb ::
 
- $> bin/funnelweb --crawler:max=400000
+ $> bin/funnelweb --crawler:maxsize=400000
 
 To skip crawling links by regular expression ::
 
