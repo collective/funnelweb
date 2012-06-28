@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '1.1'
+version = '1.1.1'
 
 long_description = (
     read('README.rst')
@@ -61,12 +61,12 @@ setup(name='funnelweb',
                         'Products.CMFCore',
                         'zope.app.pagetemplate',
                         'zope.app.component',
-                        'mr.migrator>=1.0b11',
+                        'mr.migrator>=1.0',
                         # -*- Extra requirements: -*-
                         ],
-      tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
-      test_suite = 'funnelweb.recipe.tests.test_docs.test_suite',
+#      tests_require=tests_require,
+#      extras_require=dict(tests=tests_require),
+#      test_suite = 'funnelweb.recipe.tests.test_docs.test_suite',
       entry_points = {"zc.buildout": ["default = funnelweb.recipe:Recipe"],
                       'console_scripts': ['funnelweb = funnelweb.runner:runner'],
                       "z3c.autoinclude.plugin":['target = plone'],

@@ -1,4 +1,9 @@
-1.1 (2011-04-28)
+1.1.1 (2012-06-28)
+------------------
+- fix an issue in setup.py that broke buildout
+
+
+1.1 (2012-04-28)
 ----------------
 
 - set default pipeline so can be used without buildout [djay]
