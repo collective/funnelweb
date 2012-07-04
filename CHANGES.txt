@@ -1,9 +1,15 @@
-1.1.1dev (Unreleased)
+1.1.2dev (Unreleased)
 ---------------------
 
 - Add ignore_re attribute for titleguess pipeline [ivanteoh]
+- Move sitemapper pipeline between indexguess and titleguess [ivanteoh]
+- Add default pages attribute for indexguess pipeline [ivanteoh]
 
-1.1 (2011-04-28)
+1.1.1 (2012-06-28)
+------------------
+- fix an issue in setup.py that broke buildout
+
+1.1 (2012-04-28)
 ----------------
 
 - set default pipeline so can be used without buildout [djay]
