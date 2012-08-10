@@ -4,7 +4,7 @@
     i18n_domain="funnelweb"
     >
 
-    <include package="zope.app.component" file="meta.zcml"/>
+<!--    <include package="zope.app.component" file="meta.zcml"/> -->
     <include package="collective.transmogrifier" file="meta.zcml"/>
     <include package="collective.transmogrifier.sections"/>
 
